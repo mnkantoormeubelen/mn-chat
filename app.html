@@ -13,22 +13,19 @@
     :root { --blue:#0a8de9; --blue-dark:#0875c7; --blue-light:#e8f4fd; --green:#1a9e3f; --red:#e24b4a; --text:#1a1a1a; --muted:#6b7280; --border:#e5e7eb; --bg:#f5f5f3; --surface:#ffffff; }
     html,body { height:100%; font-family:system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); overflow:hidden; }
 
-    /* LOGIN */
     #login-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:32px 24px; }
     .login-logo { width:72px; height:72px; background:var(--blue); border-radius:20px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; box-shadow:0 4px 16px rgba(10,141,233,0.3); }
     .login-logo span { color:#fff; font-size:26px; font-weight:700; }
     .login-title { font-size:24px; font-weight:600; margin-bottom:6px; }
-    .login-sub { font-size:14px; color:var(--muted); margin-bottom:36px; text-align:center; line-height:1.5; }
+    .login-sub { font-size:14px; color:var(--muted); margin-bottom:36px; text-align:center; }
     .login-input { width:100%; border:1.5px solid var(--border); border-radius:12px; padding:13px 16px; font-size:16px; font-family:inherit; margin-bottom:12px; outline:none; background:var(--surface); }
     .login-input:focus { border-color:var(--blue); }
     .login-btn { width:100%; background:var(--blue); color:#fff; border:none; border-radius:12px; padding:14px; font-size:16px; font-weight:500; cursor:pointer; font-family:inherit; }
 
-    /* APP */
     #app-screen { display:none; height:100vh; flex-direction:column; }
     .screen { display:none; flex-direction:column; flex:1; overflow:hidden; }
     .screen.active { display:flex; }
 
-    /* TOPBAR */
     .topbar { background:var(--blue); padding:12px 16px; padding-top:max(12px,env(safe-area-inset-top)); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
     .topbar-left { display:flex; align-items:center; gap:10px; }
     .topbar-logo { width:34px; height:34px; background:rgba(255,255,255,0.2); border-radius:9px; display:flex; align-items:center; justify-content:center; }
@@ -37,22 +34,19 @@
     .topbar-sub { color:rgba(255,255,255,0.75); font-size:11px; margin-top:1px; }
     .online-badge { background:rgba(255,255,255,0.2); border-radius:20px; padding:4px 10px; display:flex; align-items:center; gap:5px; }
     .online-dot { width:7px; height:7px; border-radius:50%; }
-    .dot-green { background:#4ade80; } .dot-gray { background:#9ca3af; }
+    .dot-green{background:#4ade80;} .dot-gray{background:#9ca3af;}
     .online-text { color:#fff; font-size:12px; }
 
-    /* NOTIF PERMISSION BANNER */
-    #notif-permission-bar { background:#1a1a1a; color:#fff; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-shrink:0; }
+    #notif-permission-bar { background:#1a1a1a; color:#fff; padding:10px 16px; display:flex; align-items:center; gap:10px; flex-shrink:0; }
     #notif-permission-bar p { font-size:13px; flex:1; }
     .allow-btn { background:var(--green); color:#fff; border:none; border-radius:8px; padding:6px 14px; font-size:13px; font-weight:500; cursor:pointer; font-family:inherit; white-space:nowrap; }
     .dismiss-btn { background:none; border:none; color:rgba(255,255,255,0.6); font-size:20px; cursor:pointer; padding:0 4px; }
 
-    /* TABS */
     .tabs { background:var(--surface); border-bottom:1px solid var(--border); display:flex; flex-shrink:0; }
     .tab { flex:1; padding:11px 6px; text-align:center; font-size:13px; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; }
     .tab.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:500; }
     .tab-badge { display:inline-block; background:var(--red); color:#fff; border-radius:10px; font-size:10px; font-weight:600; padding:1px 6px; margin-left:3px; }
 
-    /* CHAT LIST */
     .scroll-area { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
     .chat-item { display:flex; align-items:center; gap:12px; padding:13px 16px; background:var(--surface); border-bottom:1px solid var(--border); cursor:pointer; }
     .chat-item.unread { border-left:3px solid var(--blue); }
@@ -69,7 +63,6 @@
     .empty-icon { font-size:44px; margin-bottom:14px; }
     .empty-title { font-size:16px; font-weight:500; color:var(--text); margin-bottom:6px; }
 
-    /* CHAT VIEW */
     #chat-view { position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); z-index:100; display:none; flex-direction:column; }
     .chat-header { background:var(--surface); border-bottom:1px solid var(--border); padding:12px 16px; padding-top:max(12px,env(safe-area-inset-top)); display:flex; align-items:center; gap:10px; flex-shrink:0; }
     .back-btn { color:var(--blue); font-size:15px; cursor:pointer; background:none; border:none; font-family:inherit; padding:4px 8px 4px 0; }
@@ -81,7 +74,7 @@
     .close-btn-red { background:var(--red); color:#fff; border:none; border-radius:6px; padding:5px 12px; font-size:12px; cursor:pointer; font-family:inherit; font-weight:500; }
     .messages-area { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px; display:flex; flex-direction:column; gap:8px; }
     .msg { display:flex; flex-direction:column; max-width:80%; }
-    .msg.customer { align-self:flex-start; } .msg.agent { align-self:flex-end; }
+    .msg.customer{align-self:flex-start;} .msg.agent{align-self:flex-end;}
     .msg-bubble { padding:9px 13px; border-radius:16px; font-size:14px; line-height:1.5; word-break:break-word; }
     .msg.customer .msg-bubble { background:var(--surface); border:1px solid var(--border); border-bottom-left-radius:4px; }
     .msg.agent .msg-bubble { background:var(--blue); color:#fff; border-bottom-right-radius:4px; }
@@ -93,42 +86,53 @@
     .send-btn { width:40px; height:40px; border-radius:50%; background:var(--blue); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .send-btn:active { background:var(--blue-dark); }
 
-    /* SETTINGS */
-    .settings-scroll { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:12px; }
+    .settings-scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px; display:flex; flex-direction:column; gap:12px; }
     .card { background:var(--surface); border-radius:12px; border:1px solid var(--border); overflow:hidden; }
-    .card-header { padding:12px 14px; border-bottom:1px solid var(--border); font-size:12px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; }
-    .setting-row { display:flex; align-items:center; justify-content:space-between; padding:13px 14px; border-bottom:1px solid var(--border); }
+    .card-header { padding:12px 14px; border-bottom:1px solid var(--border); font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; }
+    .setting-row { display:flex; align-items:center; justify-content:space-between; padding:13px 14px; border-bottom:1px solid var(--border); gap:12px; }
     .setting-row:last-child { border-bottom:none; }
     .setting-label { font-size:14px; font-weight:500; }
-    .setting-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+    .setting-sub { font-size:12px; color:var(--muted); margin-top:2px; line-height:1.4; }
     .toggle { width:46px; height:28px; border-radius:14px; border:none; cursor:pointer; position:relative; transition:background 0.2s; flex-shrink:0; }
-    .toggle.on { background:var(--green); } .toggle.off { background:#d1d5db; }
+    .toggle.on{background:var(--green);} .toggle.off{background:#d1d5db;}
     .toggle-knob { position:absolute; top:3px; width:22px; height:22px; border-radius:50%; background:#fff; transition:left 0.2s; box-shadow:0 1px 4px rgba(0,0,0,0.2); }
-    .toggle.on .toggle-knob { left:21px; } .toggle.off .toggle-knob { left:3px; }
-    .day-row { display:flex; align-items:center; padding:10px 14px; border-bottom:1px solid var(--border); gap:10px; }
+    .toggle.on .toggle-knob{left:21px;} .toggle.off .toggle-knob{left:3px;}
+
+    .day-row { display:flex; align-items:center; padding:11px 14px; border-bottom:1px solid var(--border); gap:10px; }
     .day-row:last-child { border-bottom:none; }
     .day-toggle { width:38px; height:24px; border-radius:12px; border:none; cursor:pointer; position:relative; transition:background 0.2s; flex-shrink:0; }
-    .day-toggle.on { background:var(--green); } .day-toggle.off { background:#d1d5db; }
+    .day-toggle.on{background:var(--green);} .day-toggle.off{background:#d1d5db;}
     .day-toggle-knob { position:absolute; top:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:left 0.2s; }
-    .day-toggle.on .day-toggle-knob { left:17px; } .day-toggle.off .day-toggle-knob { left:3px; }
+    .day-toggle.on .day-toggle-knob{left:17px;} .day-toggle.off .day-toggle-knob{left:3px;}
     .day-name { font-size:14px; font-weight:500; width:34px; flex-shrink:0; }
     .time-inputs { display:flex; align-items:center; gap:6px; flex:1; }
     .time-input { border:1px solid var(--border); border-radius:8px; padding:6px 8px; font-size:13px; font-family:inherit; text-align:center; width:76px; outline:none; background:var(--bg); }
     .time-input:focus { border-color:var(--blue); }
     .time-input:disabled { color:var(--muted); }
     .day-closed { font-size:13px; color:var(--muted); flex:1; }
-    .status-banner { margin:0 14px 14px; background:var(--blue-light); border-radius:10px; padding:11px 13px; font-size:13px; color:#0c447c; }
-    .save-btn { margin:0 14px 14px; background:var(--blue); color:#fff; border:none; border-radius:10px; padding:13px; font-size:15px; font-weight:500; cursor:pointer; font-family:inherit; width:calc(100% - 28px); }
+
+    .status-banner { margin:0 14px 14px; background:var(--blue-light); border-radius:10px; padding:12px 14px; font-size:13px; color:#0c447c; line-height:1.5; }
+    .textarea-field { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:11px 13px; font-size:14px; font-family:inherit; resize:none; outline:none; line-height:1.5; background:var(--bg); min-height:80px; }
+    .textarea-field:focus { border-color:var(--blue); background:var(--surface); }
+    .field-wrap { padding:12px 14px; border-bottom:1px solid var(--border); }
+    .field-wrap:last-child { border-bottom:none; }
+    .field-label { font-size:13px; font-weight:500; margin-bottom:6px; }
+    .field-sub { font-size:12px; color:var(--muted); margin-bottom:8px; line-height:1.4; }
+    .char-count { font-size:11px; color:var(--muted); text-align:right; margin-top:4px; }
+    .preview-bubble { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:12px 14px; margin-top:8px; }
+    .preview-label { font-size:11px; color:var(--muted); margin-bottom:8px; font-weight:500; }
+    .preview-msg { background:#f3f4f6; border-radius:10px; border-bottom-left-radius:3px; padding:9px 12px; font-size:13px; color:var(--text); line-height:1.5; display:inline-block; max-width:85%; }
+
+    .save-btn { background:var(--blue); color:#fff; border:none; border-radius:10px; padding:13px; font-size:15px; font-weight:500; cursor:pointer; font-family:inherit; width:100%; }
+    .save-btn:active { background:var(--blue-dark); }
     .logout-btn { background:none; border:none; padding:13px; font-size:15px; font-family:inherit; cursor:pointer; color:var(--red); width:100%; text-align:center; }
 
-    /* BOTTOM NAV */
     .bottom-nav { background:var(--surface); border-top:1px solid var(--border); display:flex; padding-bottom:env(safe-area-inset-bottom); flex-shrink:0; }
     .nav-item { flex:1; padding:8px 4px; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; }
     .nav-icon { font-size:22px; }
     .nav-label { font-size:10px; color:var(--muted); }
     .nav-item.active .nav-label { color:var(--blue); }
 
-    /* TOAST NOTIFICATIE */
     .toast { position:fixed; top:16px; left:12px; right:12px; background:#1a1a1a; color:#fff; border-radius:14px; padding:13px 16px; display:flex; align-items:center; gap:12px; z-index:999; transform:translateY(-140px); transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 4px 20px rgba(0,0,0,0.25); cursor:pointer; }
     .toast.show { transform:translateY(0); }
     .toast-avatar { width:38px; height:38px; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
@@ -138,7 +142,6 @@
 </head>
 <body>
 
-<!-- IN-APP TOAST -->
 <div class="toast" id="toast" onclick="openToastChat()">
   <div class="toast-avatar">MN</div>
   <div><div class="toast-title" id="toast-title">Nieuw bericht</div><div class="toast-sub" id="toast-sub"></div></div>
@@ -156,7 +159,7 @@
 <!-- APP -->
 <div id="app-screen">
 
-  <!-- CHATS SCREEN -->
+  <!-- CHATS -->
   <div class="screen active" id="screen-chats">
     <div class="topbar">
       <div class="topbar-left">
@@ -184,7 +187,7 @@
     </div>
   </div>
 
-  <!-- SETTINGS SCREEN -->
+  <!-- SETTINGS -->
   <div class="screen" id="screen-settings">
     <div class="topbar">
       <div class="topbar-left">
@@ -193,39 +196,82 @@
       </div>
     </div>
     <div class="settings-scroll">
+
+      <!-- Huidige status -->
       <div class="card">
         <div class="card-header">📡 Huidige status</div>
         <div class="status-banner" id="status-banner">Bezig met laden…</div>
       </div>
+
+      <!-- Handmatige override -->
       <div class="card">
         <div class="card-header">🔘 Handmatige status</div>
         <div class="setting-row">
-          <div><div class="setting-label">Online zetten</div><div class="setting-sub">Overschrijft het automatische schema</div></div>
+          <div><div class="setting-label">Nu online zetten</div><div class="setting-sub">Overschrijft het automatische schema tijdelijk</div></div>
           <button class="toggle off" id="manual-toggle" onclick="toggleManual()"><div class="toggle-knob"></div></button>
         </div>
       </div>
+
+      <!-- Schema -->
       <div class="card">
         <div class="card-header">📅 Automatisch schema</div>
         <div class="setting-row">
-          <div><div class="setting-label">Schema inschakelen</div><div class="setting-sub">Widget volgt openingstijden automatisch</div></div>
+          <div><div class="setting-label">Schema inschakelen</div><div class="setting-sub">Widget schakelt automatisch op basis van openingstijden</div></div>
           <button class="toggle on" id="schedule-toggle" onclick="toggleSchedule()"><div class="toggle-knob"></div></button>
         </div>
-        <div class="setting-row">
-          <div><div class="setting-label">Terugbelverzoek tonen</div><div class="setting-sub">Klant kan bericht achterlaten buiten openingstijden</div></div>
-          <button class="toggle on" id="callback-toggle" onclick="toggleBtn('callback-toggle')"><div class="toggle-knob"></div></button>
-        </div>
       </div>
+
+      <!-- Openingstijden -->
       <div class="card">
-        <div class="card-header">🕐 Openingstijden</div>
+        <div class="card-header">🕐 Openingstijden per dag</div>
         <div id="days-container"></div>
       </div>
+
+      <!-- Berichten voor klanten -->
       <div class="card">
-        <div class="card-header">🔔 Meldingen</div>
+        <div class="card-header">💬 Berichten voor klanten</div>
+
+        <div class="field-wrap">
+          <div class="field-label">Begroeting (als we online zijn)</div>
+          <div class="field-sub">Dit ziet de klant als de chat opent tijdens openingstijden</div>
+          <textarea class="textarea-field" id="msg-online" oninput="updatePreviews();updateCharCount('msg-online','count-online')" maxlength="200">Goedemiddag! Waarmee kan ik je helpen? 👋</textarea>
+          <div class="char-count"><span id="count-online">42</span>/200</div>
+          <div class="preview-bubble">
+            <div class="preview-label">Voorbeeld klantweergave</div>
+            <div class="preview-msg" id="preview-online">Goedemiddag! Waarmee kan ik je helpen? 👋</div>
+          </div>
+        </div>
+
+        <div class="field-wrap">
+          <div class="field-label">Afwezigheidsboodschap (buiten openingstijden)</div>
+          <div class="field-sub">Dit ziet de klant als de chat opent buiten openingstijden</div>
+          <textarea class="textarea-field" id="msg-offline" oninput="updatePreviews();updateCharCount('msg-offline','count-offline')" maxlength="300">Bedankt voor je bericht! Onze klantenservice is momenteel gesloten. We reageren zo snel mogelijk tijdens onze openingstijden. 🕐</textarea>
+          <div class="char-count"><span id="count-offline">134</span>/300</div>
+          <div class="preview-bubble">
+            <div class="preview-label">Voorbeeld klantweergave</div>
+            <div class="preview-msg" id="preview-offline">Bedankt voor je bericht! Onze klantenservice is momenteel gesloten. We reageren zo snel mogelijk tijdens onze openingstijden. 🕐</div>
+          </div>
+        </div>
+
+        <div class="field-wrap">
+          <div class="field-label">Openingstijden tonen aan klant</div>
+          <div class="field-sub">Voeg automatisch je openingstijden toe aan de afwezigheidsboodschap</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+            <span style="font-size:14px;color:var(--text)">Openingstijden weergeven</span>
+            <button class="toggle on" id="show-hours-toggle" onclick="toggleBtn('show-hours-toggle')"><div class="toggle-knob"></div></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meldingen -->
+      <div class="card">
+        <div class="card-header">🔔 Pushmeldingen</div>
         <div class="setting-row">
-          <div><div class="setting-label">Push meldingen</div><div class="setting-sub" id="notif-status-text">Nog niet ingeschakeld</div></div>
+          <div><div class="setting-label">Meldingen op dit apparaat</div><div class="setting-sub" id="notif-status-text">Controleren…</div></div>
           <button class="allow-btn" id="notif-settings-btn" onclick="requestNotifPermission()">Aanzetten</button>
         </div>
       </div>
+
       <button class="save-btn" onclick="saveSettings()">💾 Opslaan</button>
       <div class="card"><div class="setting-row"><button class="logout-btn" onclick="doLogout()">Uitloggen</button></div></div>
     </div>
@@ -264,7 +310,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
 <script>
-const FIREBASE_CONFIG = {
+firebase.initializeApp({
   apiKey:"AIzaSyAvgWPDiTlbcCwqE2Hwh47DHputbSQyCds",
   authDomain:"mn-chat-7a6bd.firebaseapp.com",
   databaseURL:"https://mn-chat-7a6bd-default-rtdb.firebaseio.com",
@@ -272,12 +318,10 @@ const FIREBASE_CONFIG = {
   storageBucket:"mn-chat-7a6bd.firebasestorage.app",
   messagingSenderId:"765217629725",
   appId:"1:765217629725:web:85fe5f0d296025a75908f4"
-};
-const VAPID_KEY = "BPL-ljKaAxe9jTwwhca_UJa8e9z4UAg1Skq2vRi2Rw5lkq4eJq42PfRI1zNJFeEJsfmZdBWiAjVjgPuh3RzoH3U";
-
-firebase.initializeApp(FIREBASE_CONFIG);
+});
 const db = firebase.database();
 const messaging = firebase.messaging();
+const VAPID_KEY = "BPL-ljKaAxe9jTwwhca_UJa8e9z4UAg1Skq2vRi2Rw5lkq4eJq42PfRI1zNJFeEJsfmZdBWiAjVjgPuh3RzoH3U";
 
 let agentName = localStorage.getItem('mn_agent') || '';
 let currentChatId = null;
@@ -300,13 +344,10 @@ const days = [
 
 if (agentName) showApp();
 
-// ── LOGIN ─────────────────────────────────────
 function doLogin() {
   const name = document.getElementById('login-name').value.trim();
   if (!name) { document.getElementById('login-name').focus(); return; }
-  agentName = name;
-  localStorage.setItem('mn_agent', name);
-  showApp();
+  agentName = name; localStorage.setItem('mn_agent', name); showApp();
 }
 document.getElementById('login-name').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 function doLogout() { localStorage.removeItem('mn_agent'); location.reload(); }
@@ -319,83 +360,68 @@ function showApp() {
   document.getElementById('settings-agent-name').textContent = agentName;
   renderDays();
   updateStatusBanner();
+  updateCharCount('msg-online','count-online');
+  updateCharCount('msg-offline','count-offline');
   listenToChats();
+  loadSettings();
   initNotifications();
+}
+
+// ── SETTINGS LADEN ────────────────────────────
+function loadSettings() {
+  db.ref('settings').once('value', snap => {
+    const s = snap.val();
+    if (!s) return;
+    if (s.scheduleOn !== undefined) { scheduleOn = s.scheduleOn; document.getElementById('schedule-toggle').className='toggle '+(scheduleOn?'on':'off'); }
+    if (s.msgOnline) document.getElementById('msg-online').value = s.msgOnline;
+    if (s.msgOffline) document.getElementById('msg-offline').value = s.msgOffline;
+    if (s.schedule) s.schedule.forEach((d,i) => { days[i].open=d.open; days[i].from=d.from; days[i].to=d.to; });
+    renderDays();
+    updateStatusBanner();
+    updatePreviews();
+    updateCharCount('msg-online','count-online');
+    updateCharCount('msg-offline','count-offline');
+  });
 }
 
 // ── NOTIFICATIONS ─────────────────────────────
 function initNotifications() {
-  if (!('Notification' in window)) return;
-  if (Notification.permission === 'granted') {
-    registerSW();
-    updateNotifStatus('✅ Meldingen zijn ingeschakeld');
-    document.getElementById('notif-settings-btn').textContent = 'Ingeschakeld';
-    document.getElementById('notif-settings-btn').style.background = 'var(--green)';
-  } else if (Notification.permission !== 'denied') {
-    document.getElementById('notif-permission-bar').style.display = 'flex';
-  } else {
-    updateNotifStatus('❌ Geblokkeerd — sta toe in browserinstellingen');
-  }
+  if (!('Notification' in window)) { updateNotifStatus('Niet ondersteund op dit apparaat'); return; }
+  if (Notification.permission === 'granted') { registerSW(); updateNotifStatus('✅ Ingeschakeld'); document.getElementById('notif-settings-btn').textContent='✓ Aan'; document.getElementById('notif-settings-btn').style.background='var(--green)'; }
+  else if (Notification.permission !== 'denied') { document.getElementById('notif-permission-bar').style.display='flex'; updateNotifStatus('Nog niet ingeschakeld — tik op Aanzetten'); }
+  else { updateNotifStatus('❌ Geblokkeerd — sta toe in browserinstellingen'); }
 }
-
 function requestNotifPermission() {
-  Notification.requestPermission().then(permission => {
-    if (permission === 'granted') {
-      registerSW();
-      document.getElementById('notif-permission-bar').style.display = 'none';
-      updateNotifStatus('✅ Meldingen zijn ingeschakeld');
-      document.getElementById('notif-settings-btn').textContent = 'Ingeschakeld';
-      document.getElementById('notif-settings-btn').style.background = 'var(--green)';
-    } else {
-      updateNotifStatus('❌ Niet toegestaan');
-    }
+  Notification.requestPermission().then(p => {
+    if (p==='granted') { registerSW(); document.getElementById('notif-permission-bar').style.display='none'; updateNotifStatus('✅ Ingeschakeld'); document.getElementById('notif-settings-btn').textContent='✓ Aan'; document.getElementById('notif-settings-btn').style.background='var(--green)'; }
+    else { updateNotifStatus('❌ Niet toegestaan'); }
   });
 }
-
-function dismissNotifBar() {
-  document.getElementById('notif-permission-bar').style.display = 'none';
-}
-
-function updateNotifStatus(text) {
-  document.getElementById('notif-status-text').textContent = text;
-}
-
+function dismissNotifBar() { document.getElementById('notif-permission-bar').style.display='none'; }
+function updateNotifStatus(t) { document.getElementById('notif-status-text').textContent=t; }
 function registerSW() {
   if (!('serviceWorker' in navigator)) return;
-  navigator.serviceWorker.register('/mn-chat/firebase-messaging-sw.js')
-    .then(reg => {
-      messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: reg })
-        .then(token => {
-          if (token) {
-            // Sla FCM token op per medewerker in Firebase
-            db.ref('agents/' + agentName.replace(/\s/g,'_') + '/fcmToken').set(token);
-          }
-        }).catch(err => console.warn('FCM token fout:', err));
-    }).catch(err => console.warn('Service worker fout:', err));
+  navigator.serviceWorker.register('/mn-chat/firebase-messaging-sw.js').then(reg => {
+    messaging.getToken({vapidKey:VAPID_KEY,serviceWorkerRegistration:reg}).then(token => {
+      if (token) db.ref('agents/'+agentName.replace(/\s/g,'_')+'/fcmToken').set(token);
+    }).catch(e => console.warn('FCM:',e));
+  }).catch(e => console.warn('SW:',e));
 }
-
-// In-app melding (als app open is)
-messaging.onMessage(payload => {
-  const title = payload.notification?.title || 'Nieuw bericht';
-  const body  = payload.notification?.body  || '';
-  showToast(title, body, null);
-});
+messaging.onMessage(payload => { showToast(payload.notification?.title||'Nieuw bericht', payload.notification?.body||'', null); });
 
 // ── FIREBASE CHATS ────────────────────────────
 function listenToChats() {
   db.ref('chats').on('value', snap => {
     const prev = JSON.stringify(allChats);
     allChats = snap.val() || {};
-    Object.entries(allChats).forEach(([id, chat]) => {
-      if (!chat.messages || id === currentChatId) return;
+    Object.entries(allChats).forEach(([id,chat]) => {
+      if (!chat.messages||id===currentChatId) return;
       const msgs = Object.values(chat.messages);
       const lastMsg = msgs[msgs.length-1];
-      if (!lastMsg || lastMsg.role !== 'customer') return;
+      if (!lastMsg||lastMsg.role!=='customer') return;
       const prevChat = JSON.parse(prev)[id];
-      const prevCount = prevChat?.messages ? Object.keys(prevChat.messages).length : 0;
-      if (Object.keys(chat.messages).length > prevCount) {
-        showToast('Nieuw bericht van klant', lastMsg.text.substr(0,60), id);
-      }
+      const prevCount = prevChat?.messages?Object.keys(prevChat.messages).length:0;
+      if (Object.keys(chat.messages).length>prevCount) showToast('Nieuw bericht van klant', lastMsg.text.substr(0,60), id);
     });
     renderChatList();
   });
@@ -404,168 +430,97 @@ function listenToChats() {
 function sendReply() {
   const input = document.getElementById('reply-input');
   const text = input.value.trim();
-  if (!text || !currentChatId) return;
-  db.ref('chats/' + currentChatId + '/messages').push({
-    role:'agent', sender:agentName, text:text, timestamp:Date.now()
-  }).then(() => {
-    input.value = '';
-    input.style.height = 'auto';
-    db.ref('chats/' + currentChatId + '/claimedBy').once('value', snap => {
-      if (!snap.val()) db.ref('chats/' + currentChatId).update({ claimedBy:agentName });
-    });
-  }).catch(err => alert('Kon niet versturen: ' + err.message));
+  if (!text||!currentChatId) return;
+  db.ref('chats/'+currentChatId+'/messages').push({role:'agent',sender:agentName,text,timestamp:Date.now()})
+    .then(() => {
+      input.value=''; input.style.height='auto';
+      db.ref('chats/'+currentChatId+'/claimedBy').once('value', snap => { if(!snap.val()) db.ref('chats/'+currentChatId).update({claimedBy:agentName}); });
+    }).catch(e => alert('Kon niet versturen: '+e.message));
 }
-
-function claimChat() {
-  if (!currentChatId) return;
-  db.ref('chats/' + currentChatId).update({ claimedBy:agentName });
-}
-
-function endChat() {
-  if (!currentChatId) return;
-  db.ref('chats/' + currentChatId).update({ status:'closed', claimedBy:null });
-  backToList();
-}
+function claimChat() { if(currentChatId) db.ref('chats/'+currentChatId).update({claimedBy:agentName}); }
+function endChat() { if(!currentChatId) return; db.ref('chats/'+currentChatId).update({status:'closed',claimedBy:null}); backToList(); }
 
 // ── CHAT LIST ─────────────────────────────────
 function renderChatList() {
-  const container = document.getElementById('chats-container');
+  const c = document.getElementById('chats-container');
   let entries = Object.entries(allChats);
-  document.getElementById('badge-open').textContent = entries.filter(([,c])=>c.status==='open').length;
+  document.getElementById('badge-open').textContent = entries.filter(([,x])=>x.status==='open').length;
   let filtered;
-  if (currentFilter==='open') filtered = entries.filter(([,c])=>c.status==='open');
-  else if (currentFilter==='mine') filtered = entries.filter(([,c])=>c.status==='open'&&c.claimedBy===agentName);
-  else filtered = entries.filter(([,c])=>c.status==='closed');
-  if (!filtered.length) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">Geen chats</div><div>Zodra een klant een bericht stuurt verschijnt die hier</div></div>';
-    return;
-  }
-  filtered.sort(([,a],[,b]) => {
-    const ta = a.messages ? Math.max(...Object.values(a.messages).map(m=>m.timestamp||0)):0;
-    const tb = b.messages ? Math.max(...Object.values(b.messages).map(m=>m.timestamp||0)):0;
-    return tb-ta;
-  });
-  container.innerHTML = '';
-  filtered.forEach(([id,chat]) => {
-    const msgs = chat.messages ? Object.values(chat.messages) : [];
-    const lastMsg = msgs[msgs.length-1];
-    const isUnread = lastMsg && lastMsg.role==='customer';
-    const colors = ['av-blue','av-green','av-orange'];
-    const color = colors[Math.abs(hashCode(id))%3];
-    const page = chat.page ? chat.page.replace('https://www.mnkantoormeubelen.nl','')||'Homepage' : '';
-    const div = document.createElement('div');
-    div.className = 'chat-item'+(isUnread?' unread':'');
-    div.onclick = () => openChat(id,chat);
-    div.innerHTML = `
-      <div class="chat-avatar ${color}">${id.substr(8,2).toUpperCase()}</div>
-      <div class="chat-meta">
-        <div class="chat-name">Klant · ${formatTime(chat.started)}</div>
-        <div class="chat-preview">${lastMsg?escHtml(lastMsg.text):'Geen berichten'}</div>
-        ${page?`<div class="chat-page-label">📍 ${escHtml(page)}</div>`:''}
-      </div>
-      <div class="chat-right">
-        <div class="chat-time">${lastMsg?formatTime(lastMsg.timestamp):''}</div>
-        ${isUnread?'<div class="unread-dot"></div>':''}
-        ${chat.claimedBy?`<div style="font-size:10px;color:var(--muted)">${escHtml(chat.claimedBy)}</div>`:''}
-      </div>`;
-    container.appendChild(div);
+  if (currentFilter==='open') filtered=entries.filter(([,x])=>x.status==='open');
+  else if (currentFilter==='mine') filtered=entries.filter(([,x])=>x.status==='open'&&x.claimedBy===agentName);
+  else filtered=entries.filter(([,x])=>x.status==='closed');
+  if (!filtered.length) { c.innerHTML='<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">Geen chats</div><div>Zodra een klant een bericht stuurt verschijnt die hier</div></div>'; return; }
+  filtered.sort(([,a],[,b])=>{ const ta=a.messages?Math.max(...Object.values(a.messages).map(m=>m.timestamp||0)):0; const tb=b.messages?Math.max(...Object.values(b.messages).map(m=>m.timestamp||0)):0; return tb-ta; });
+  c.innerHTML='';
+  filtered.forEach(([id,chat])=>{
+    const msgs=chat.messages?Object.values(chat.messages):[];
+    const lastMsg=msgs[msgs.length-1];
+    const isUnread=lastMsg&&lastMsg.role==='customer';
+    const color=['av-blue','av-green','av-orange'][Math.abs(hashCode(id))%3];
+    const page=chat.page?chat.page.replace('https://www.mnkantoormeubelen.nl','')||'Homepage':'';
+    const div=document.createElement('div');
+    div.className='chat-item'+(isUnread?' unread':'');
+    div.onclick=()=>openChat(id,chat);
+    div.innerHTML=`<div class="chat-avatar ${color}">${id.substr(8,2).toUpperCase()}</div><div class="chat-meta"><div class="chat-name">Klant · ${formatTime(chat.started)}</div><div class="chat-preview">${lastMsg?escHtml(lastMsg.text):'Geen berichten'}</div>${page?`<div class="chat-page-label">📍 ${escHtml(page)}</div>`:''}</div><div class="chat-right"><div class="chat-time">${lastMsg?formatTime(lastMsg.timestamp):''}</div>${isUnread?'<div class="unread-dot"></div>':''}${chat.claimedBy?`<div style="font-size:10px;color:var(--muted)">${escHtml(chat.claimedBy)}</div>`:''}</div>`;
+    c.appendChild(div);
   });
 }
-
-function filterChats(filter,el) {
-  currentFilter = filter;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  renderChatList();
-}
+function filterChats(filter,el){ currentFilter=filter; document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); renderChatList(); }
 
 // ── CHAT VIEW ─────────────────────────────────
-function openChat(id,chat) {
-  currentChatId = id;
-  document.getElementById('cv-name').textContent = 'Klant · '+formatTime(chat.started);
-  const page = chat.page?chat.page.replace('https://www.mnkantoormeubelen.nl','')||'Homepage':'';
-  document.getElementById('cv-page').textContent = page?'📍 '+page:'';
-  updateClaimedBar(chat);
-  renderMessages(chat.messages||{});
-  document.getElementById('chat-view').style.display = 'flex';
-  document.getElementById('chat-view').style.flexDirection = 'column';
-  if (chatListener) chatListener.off();
-  chatListener = db.ref('chats/'+id);
-  chatListener.on('value', snap => {
-    const data = snap.val(); if(!data) return;
-    updateClaimedBar(data); renderMessages(data.messages||{});
-  });
+function openChat(id,chat){
+  currentChatId=id;
+  document.getElementById('cv-name').textContent='Klant · '+formatTime(chat.started);
+  const page=chat.page?chat.page.replace('https://www.mnkantoormeubelen.nl','')||'Homepage':'';
+  document.getElementById('cv-page').textContent=page?'📍 '+page:'';
+  updateClaimedBar(chat); renderMessages(chat.messages||{});
+  document.getElementById('chat-view').style.display='flex'; document.getElementById('chat-view').style.flexDirection='column';
+  if(chatListener){chatListener.off();}
+  chatListener=db.ref('chats/'+id);
+  chatListener.on('value',snap=>{const data=snap.val();if(!data)return;updateClaimedBar(data);renderMessages(data.messages||{});});
   setTimeout(()=>document.getElementById('reply-input').focus(),300);
 }
-
-function updateClaimedBar(chat) {
-  const text = document.getElementById('claimed-text');
-  const btn  = document.getElementById('claim-btn');
-  if (chat.claimedBy) {
-    text.textContent = 'Opgepakt door '+chat.claimedBy;
-    if (chat.claimedBy===agentName) { btn.textContent='Afsluiten'; btn.className='close-btn-red'; btn.onclick=endChat; }
-    else { btn.textContent='Overnemen'; btn.className='claim-btn'; btn.onclick=claimChat; }
-  } else {
-    text.textContent='Nog niet opgepakt'; btn.textContent='Oppakken'; btn.className='claim-btn'; btn.onclick=claimChat;
-  }
+function updateClaimedBar(chat){
+  const text=document.getElementById('claimed-text'),btn=document.getElementById('claim-btn');
+  if(chat.claimedBy){text.textContent='Opgepakt door '+chat.claimedBy;if(chat.claimedBy===agentName){btn.textContent='Afsluiten';btn.className='close-btn-red';btn.onclick=endChat;}else{btn.textContent='Overnemen';btn.className='claim-btn';btn.onclick=claimChat;}}
+  else{text.textContent='Nog niet opgepakt';btn.textContent='Oppakken';btn.className='claim-btn';btn.onclick=claimChat;}
 }
-
-function renderMessages(messages) {
-  const area = document.getElementById('messages-area');
-  const atBottom = area.scrollHeight-area.scrollTop-area.clientHeight < 80;
-  const msgs = Object.values(messages).sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
-  area.innerHTML = '';
-  msgs.forEach(msg => {
-    const div = document.createElement('div');
-    div.className = 'msg '+(msg.role==='agent'?'agent':'customer');
-    const sender = msg.role==='agent'?(msg.sender||'Agent'):'Klant';
-    div.innerHTML = `<div class="msg-bubble">${escHtml(msg.text)}</div><div class="msg-meta">${escHtml(sender)} · ${formatTime(msg.timestamp)}</div>`;
-    area.appendChild(div);
-  });
-  if (atBottom||msgs.length<=3) area.scrollTop = area.scrollHeight;
+function renderMessages(messages){
+  const area=document.getElementById('messages-area');
+  const atBottom=area.scrollHeight-area.scrollTop-area.clientHeight<80;
+  const msgs=Object.values(messages).sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
+  area.innerHTML='';
+  msgs.forEach(msg=>{const div=document.createElement('div');div.className='msg '+(msg.role==='agent'?'agent':'customer');const sender=msg.role==='agent'?(msg.sender||'Agent'):'Klant';div.innerHTML=`<div class="msg-bubble">${escHtml(msg.text)}</div><div class="msg-meta">${escHtml(sender)} · ${formatTime(msg.timestamp)}</div>`;area.appendChild(div);});
+  if(atBottom||msgs.length<=3) area.scrollTop=area.scrollHeight;
 }
-
-function backToList() {
-  currentChatId = null;
-  if (chatListener){chatListener.off();chatListener=null;}
-  document.getElementById('chat-view').style.display='none';
-}
+function backToList(){currentChatId=null;if(chatListener){chatListener.off();chatListener=null;}document.getElementById('chat-view').style.display='none';}
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendReply();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
 
 // ── SETTINGS ─────────────────────────────────
-function renderDays() {
-  const c = document.getElementById('days-container'); c.innerHTML='';
-  days.forEach((d,i) => {
-    const row = document.createElement('div'); row.className='day-row';
-    row.innerHTML=`
-      <button class="day-toggle ${d.open?'on':'off'}" onclick="toggleDay(${i})"><div class="day-toggle-knob"></div></button>
-      <span class="day-name">${d.label}</span>
-      ${d.open
-        ?`<div class="time-inputs"><input class="time-input" type="time" value="${d.from}" onchange="days[${i}].from=this.value;updateStatusBanner()"><span style="color:var(--muted)">–</span><input class="time-input" type="time" value="${d.to}" onchange="days[${i}].to=this.value;updateStatusBanner()"></div>`
-        :`<span class="day-closed">Gesloten</span>`}`;
+function renderDays(){
+  const c=document.getElementById('days-container');c.innerHTML='';
+  days.forEach((d,i)=>{
+    const row=document.createElement('div');row.className='day-row';
+    row.innerHTML=`<button class="day-toggle ${d.open?'on':'off'}" onclick="toggleDay(${i})"><div class="day-toggle-knob"></div></button><span class="day-name">${d.label}</span>${d.open?`<div class="time-inputs"><input class="time-input" type="time" value="${d.from}" onchange="days[${i}].from=this.value;updateStatusBanner()"><span style="color:var(--muted)">–</span><input class="time-input" type="time" value="${d.to}" onchange="days[${i}].to=this.value;updateStatusBanner()"></div>`:`<span class="day-closed">Gesloten</span>`}`;
     c.appendChild(row);
   });
 }
 function toggleDay(i){days[i].open=!days[i].open;renderDays();updateStatusBanner();}
-function toggleSchedule(){scheduleOn=!scheduleOn;const b=document.getElementById('schedule-toggle');b.className='toggle '+(scheduleOn?'on':'off');updateStatusBanner();}
-function toggleManual(){manualOn=!manualOn;const b=document.getElementById('manual-toggle');b.className='toggle '+(manualOn?'on':'off');updateStatusBanner();}
+function toggleSchedule(){scheduleOn=!scheduleOn;document.getElementById('schedule-toggle').className='toggle '+(scheduleOn?'on':'off');updateStatusBanner();}
+function toggleManual(){manualOn=!manualOn;document.getElementById('manual-toggle').className='toggle '+(manualOn?'on':'off');updateStatusBanner();}
 function toggleBtn(id){const b=document.getElementById(id);b.className='toggle '+(b.classList.contains('on')?'off':'on');}
 
-function updateStatusBanner() {
-  let online=false, msg='';
-  if (manualOn){online=true;msg='🟢 Handmatig online gezet';}
-  else if (!scheduleOn){online=false;msg='⚪ Schema uitgeschakeld — widget afwezig';}
-  else {
+function updateStatusBanner(){
+  let online=false,msg='';
+  if(manualOn){online=true;msg='🟢 Handmatig online gezet';}
+  else if(!scheduleOn){msg='⚪ Schema uitgeschakeld — widget is afwezig';}
+  else{
     const now=new Date(),dayIdx=(now.getDay()+6)%7,d=days[dayIdx];
     const toMins=t=>{const[h,m]=t.split(':').map(Number);return h*60+m;};
     const nowMins=now.getHours()*60+now.getMinutes();
-    if(d.open&&nowMins>=toMins(d.from)&&nowMins<toMins(d.to)){
-      online=true; msg=`🟢 Online — sluit om ${d.to}`;
-    } else {
-      const next=days.find((x,i)=>i>dayIdx&&x.open);
-      msg=next?`⚪ Afwezig — open ${next.label} om ${next.from}`:'⚪ Afwezig — zie schema';
-    }
+    if(d.open&&nowMins>=toMins(d.from)&&nowMins<toMins(d.to)){online=true;msg=`🟢 Online — sluit vandaag om ${d.to}`;}
+    else{const next=days.find((x,i)=>i>dayIdx&&x.open);msg=next?`⚪ Afwezig — open weer ${next.label} om ${next.from}`:'⚪ Afwezig — zie schema hieronder';}
   }
   document.getElementById('status-banner').textContent=msg;
   document.getElementById('status-dot').className='online-dot '+(online?'dot-green':'dot-gray');
@@ -573,31 +528,43 @@ function updateStatusBanner() {
   db.ref('settings/online').set(online);
 }
 
-function saveSettings() {
+function updatePreviews(){
+  document.getElementById('preview-online').textContent=document.getElementById('msg-online').value;
+  document.getElementById('preview-offline').textContent=document.getElementById('msg-offline').value;
+}
+function updateCharCount(fieldId,countId){
+  const val=document.getElementById(fieldId).value;
+  document.getElementById(countId).textContent=val.length;
+}
+
+function saveSettings(){
   const btn=document.querySelector('.save-btn');
-  db.ref('settings').set({online:manualOn||false,schedule:days,scheduleOn,updatedBy:agentName,updatedAt:Date.now()})
-    .then(()=>{btn.textContent='✓ Opgeslagen!';btn.style.background='var(--green)';setTimeout(()=>{btn.textContent='💾 Opslaan';btn.style.background='';},2000);})
-    .catch(()=>alert('Opslaan mislukt.'));
+  const showHours=document.getElementById('show-hours-toggle').classList.contains('on');
+  db.ref('settings').update({
+    online:manualOn,
+    schedule:days,
+    scheduleOn,
+    showHours,
+    msgOnline:document.getElementById('msg-online').value,
+    msgOffline:document.getElementById('msg-offline').value,
+    updatedBy:agentName,
+    updatedAt:Date.now()
+  }).then(()=>{btn.textContent='✓ Opgeslagen!';btn.style.background='var(--green)';setTimeout(()=>{btn.textContent='💾 Opslaan';btn.style.background='';},2000);})
+  .catch(()=>alert('Opslaan mislukt. Controleer je verbinding.'));
 }
 
 // ── TOAST ─────────────────────────────────────
-function showToast(title,body,chatId) {
+function showToast(title,body,chatId){
   toastChatId=chatId;
   document.getElementById('toast-title').textContent=title;
   document.getElementById('toast-sub').textContent=body.length>55?body.substr(0,55)+'…':body;
-  const t=document.getElementById('toast'); t.classList.add('show');
+  const t=document.getElementById('toast');t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),5000);
 }
-function openToastChat(){
-  document.getElementById('toast').classList.remove('show');
-  if(toastChatId&&allChats[toastChatId]) openChat(toastChatId,allChats[toastChatId]);
-}
+function openToastChat(){document.getElementById('toast').classList.remove('show');if(toastChatId&&allChats[toastChatId])openChat(toastChatId,allChats[toastChatId]);}
 
 // ── NAV ───────────────────────────────────────
-function switchTab(tab){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+tab).classList.add('active');
-}
+function switchTab(tab){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+tab).classList.add('active');}
 
 // ── HELPERS ───────────────────────────────────
 function formatTime(ts){if(!ts)return'';const d=new Date(ts);return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');}
