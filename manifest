@@ -2,7 +2,7 @@
   "name": "MN Kantoormeubelen Chat",
   "short_name": "MN Chat",
   "description": "Live chat app voor MN Kantoormeubelen medewerkers",
-  "start_url": "/app.html",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0a8de9",
