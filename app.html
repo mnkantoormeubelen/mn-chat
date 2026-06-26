@@ -401,7 +401,7 @@ function dismissNotifBar() { document.getElementById('notif-permission-bar').sty
 function updateNotifStatus(t) { document.getElementById('notif-status-text').textContent=t; }
 function registerSW() {
   if (!('serviceWorker' in navigator)) return;
-  navigator.serviceWorker.register('/mn-chat/firebase-messaging-sw.js').then(reg => {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js').then(reg => {
     messaging.getToken({vapidKey:VAPID_KEY,serviceWorkerRegistration:reg}).then(token => {
       if (token) db.ref('agents/'+agentName.replace(/\s/g,'_')+'/fcmToken').set(token);
     }).catch(e => console.warn('FCM:',e));
