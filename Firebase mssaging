@@ -31,9 +31,9 @@ self.addEventListener('notificationclick', function(event) {
   event.waitUntil(
     clients.matchAll({ type: 'window' }).then(function(clientList) {
       for (const client of clientList) {
-        if (client.url.includes('app.html') && 'focus' in client) return client.focus();
+        if (client.url.includes('index.html') && 'focus' in client) return client.focus();
       }
-      return clients.openWindow('https://super-hotteok-6ce98b.netlify.app/app.html');
+      return clients.openWindow('https://super-hotteok-6ce98b.netlify.app/index.html');
     })
   );
 });
