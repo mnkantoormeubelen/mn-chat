@@ -1,6 +1,6 @@
 // MN Chat — PWA Service Worker
 const CACHE = 'mn-chat-v1';
-const ASSETS = ['/app.html', '/manifest.json'];
+const ASSETS = ['/index.html', '/manifest.json'];
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -21,7 +21,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   event.respondWith(
     fetch(event.request).catch(() =>
-      caches.match(event.request).then(r => r || caches.match('/app.html'))
+      caches.match(event.request).then(r => r || caches.match('/index.html'))
     )
   );
 });
