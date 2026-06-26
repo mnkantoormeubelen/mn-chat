@@ -10,480 +10,599 @@
   <title>MN Chat — Werknemers</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    :root {
-      --blue: #0a8de9; --blue-dark: #0875c7; --blue-light: #e8f4fd;
-      --green: #1a9e3f; --red: #e24b4a;
-      --text: #1a1a1a; --muted: #6b7280; --border: #e5e7eb;
-      --bg: #f5f5f3; --surface: #ffffff;
-    }
-    html, body { height: 100%; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); }
+    :root { --blue:#0a8de9; --blue-dark:#0875c7; --blue-light:#e8f4fd; --green:#1a9e3f; --red:#e24b4a; --text:#1a1a1a; --muted:#6b7280; --border:#e5e7eb; --bg:#f5f5f3; --surface:#ffffff; }
+    html,body { height:100%; font-family:system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); overflow:hidden; }
 
     /* LOGIN */
-    #login-screen {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 100vh; padding: 24px;
-    }
-    .login-logo { width: 64px; height: 64px; background: var(--blue); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
-    .login-logo span { color: #fff; font-size: 22px; font-weight: 700; }
-    .login-title { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
-    .login-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
-    .login-input { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 15px; font-family: inherit; margin-bottom: 12px; outline: none; }
-    .login-input:focus { border-color: var(--blue); }
-    .login-btn { width: 100%; background: var(--blue); color: #fff; border: none; border-radius: 10px; padding: 13px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: inherit; }
-    .login-btn:active { background: var(--blue-dark); }
+    #login-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:32px 24px; }
+    .login-logo { width:72px; height:72px; background:var(--blue); border-radius:20px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; box-shadow:0 4px 16px rgba(10,141,233,0.3); }
+    .login-logo span { color:#fff; font-size:26px; font-weight:700; }
+    .login-title { font-size:24px; font-weight:600; margin-bottom:6px; }
+    .login-sub { font-size:14px; color:var(--muted); margin-bottom:36px; text-align:center; line-height:1.5; }
+    .login-input { width:100%; border:1.5px solid var(--border); border-radius:12px; padding:13px 16px; font-size:16px; font-family:inherit; margin-bottom:12px; outline:none; background:var(--surface); }
+    .login-input:focus { border-color:var(--blue); }
+    .login-btn { width:100%; background:var(--blue); color:#fff; border:none; border-radius:12px; padding:14px; font-size:16px; font-weight:500; cursor:pointer; font-family:inherit; }
 
     /* APP */
-    #app-screen { display: none; flex-direction: column; height: 100vh; }
+    #app-screen { display:none; height:100vh; flex-direction:column; }
+    .screen { display:none; flex-direction:column; flex:1; overflow:hidden; }
+    .screen.active { display:flex; }
 
     /* TOPBAR */
-    .topbar { background: var(--blue); padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-    .topbar-left { display: flex; align-items: center; gap: 10px; }
-    .topbar-logo { width: 32px; height: 32px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-    .topbar-logo span { color: #fff; font-size: 12px; font-weight: 700; }
-    .topbar-title { color: #fff; font-size: 16px; font-weight: 600; }
-    .topbar-sub { color: rgba(255,255,255,0.75); font-size: 11px; }
-    .topbar-right { display: flex; align-items: center; gap: 10px; }
-    .online-badge { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 10px; display: flex; align-items: center; gap: 5px; }
-    .online-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; }
-    .online-text { color: #fff; font-size: 12px; }
-    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 600; }
+    .topbar { background:var(--blue); padding:12px 16px; padding-top:max(12px,env(safe-area-inset-top)); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+    .topbar-left { display:flex; align-items:center; gap:10px; }
+    .topbar-logo { width:34px; height:34px; background:rgba(255,255,255,0.2); border-radius:9px; display:flex; align-items:center; justify-content:center; }
+    .topbar-logo span { color:#fff; font-size:13px; font-weight:700; }
+    .topbar-title { color:#fff; font-size:16px; font-weight:600; }
+    .topbar-sub { color:rgba(255,255,255,0.75); font-size:11px; margin-top:1px; }
+    .online-badge { background:rgba(255,255,255,0.2); border-radius:20px; padding:4px 10px; display:flex; align-items:center; gap:5px; }
+    .online-dot { width:7px; height:7px; border-radius:50%; }
+    .dot-green { background:#4ade80; } .dot-gray { background:#9ca3af; }
+    .online-text { color:#fff; font-size:12px; }
+
+    /* NOTIF PERMISSION BANNER */
+    #notif-permission-bar { background:#1a1a1a; color:#fff; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-shrink:0; }
+    #notif-permission-bar p { font-size:13px; flex:1; }
+    .allow-btn { background:var(--green); color:#fff; border:none; border-radius:8px; padding:6px 14px; font-size:13px; font-weight:500; cursor:pointer; font-family:inherit; white-space:nowrap; }
+    .dismiss-btn { background:none; border:none; color:rgba(255,255,255,0.6); font-size:20px; cursor:pointer; padding:0 4px; }
 
     /* TABS */
-    .tabs { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; flex-shrink: 0; }
-    .tab { flex: 1; padding: 11px 8px; text-align: center; font-size: 13px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; position: relative; }
-    .tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 500; }
-    .tab-badge { display: inline-block; background: var(--red); color: #fff; border-radius: 10px; font-size: 10px; font-weight: 600; padding: 1px 6px; margin-left: 4px; }
+    .tabs { background:var(--surface); border-bottom:1px solid var(--border); display:flex; flex-shrink:0; }
+    .tab { flex:1; padding:11px 6px; text-align:center; font-size:13px; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; }
+    .tab.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:500; }
+    .tab-badge { display:inline-block; background:var(--red); color:#fff; border-radius:10px; font-size:10px; font-weight:600; padding:1px 6px; margin-left:3px; }
 
     /* CHAT LIST */
-    #chat-list-view { flex: 1; overflow-y: auto; }
-    .section-label { font-size: 11px; color: var(--muted); padding: 10px 16px 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .chat-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; }
-    .chat-item:active { background: var(--bg); }
-    .chat-item.unread { border-left: 3px solid var(--blue); }
-    .chat-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: #fff; flex-shrink: 0; }
-    .av-blue { background: var(--blue); }
-    .av-green { background: var(--green); }
-    .av-orange { background: #f59e0b; }
-    .chat-meta { flex: 1; min-width: 0; }
-    .chat-name { font-size: 14px; font-weight: 500; }
-    .chat-preview { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-    .chat-page { font-size: 11px; color: var(--blue); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .chat-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
-    .chat-time { font-size: 11px; color: var(--muted); }
-    .unread-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--blue); }
-    .empty-state { padding: 60px 24px; text-align: center; color: var(--muted); }
-    .empty-icon { font-size: 40px; margin-bottom: 12px; }
-    .empty-title { font-size: 16px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+    .scroll-area { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+    .chat-item { display:flex; align-items:center; gap:12px; padding:13px 16px; background:var(--surface); border-bottom:1px solid var(--border); cursor:pointer; }
+    .chat-item.unread { border-left:3px solid var(--blue); }
+    .chat-avatar { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:600; color:#fff; flex-shrink:0; }
+    .av-blue{background:var(--blue);} .av-green{background:var(--green);} .av-orange{background:#f59e0b;}
+    .chat-meta { flex:1; min-width:0; }
+    .chat-name { font-size:14px; font-weight:500; }
+    .chat-preview { font-size:13px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
+    .chat-page-label { font-size:11px; color:var(--blue); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .chat-right { display:flex; flex-direction:column; align-items:flex-end; gap:5px; flex-shrink:0; }
+    .chat-time { font-size:11px; color:var(--muted); }
+    .unread-dot { width:9px; height:9px; border-radius:50%; background:var(--blue); }
+    .empty-state { padding:60px 24px; text-align:center; color:var(--muted); }
+    .empty-icon { font-size:44px; margin-bottom:14px; }
+    .empty-title { font-size:16px; font-weight:500; color:var(--text); margin-bottom:6px; }
 
     /* CHAT VIEW */
-    #chat-view { display: none; flex-direction: column; height: 100vh; }
-    .chat-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-    .back-btn { color: var(--blue); font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; background: none; border: none; font-family: inherit; padding: 0; }
-    .chat-header-info { flex: 1; min-width: 0; }
-    .chat-header-name { font-size: 15px; font-weight: 500; }
-    .chat-header-sub { font-size: 12px; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .claimed-bar { background: var(--blue-light); border-bottom: 1px solid #b5d4f4; padding: 7px 16px; font-size: 12px; color: #0c447c; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-    .claim-btn { background: var(--blue); color: #fff; border: none; border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; font-family: inherit; }
-    .messages-area { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-    .msg { display: flex; flex-direction: column; max-width: 80%; }
-    .msg.customer { align-self: flex-start; }
-    .msg.agent { align-self: flex-end; }
-    .msg-bubble { padding: 9px 13px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
-    .msg.customer .msg-bubble { background: var(--surface); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
-    .msg.agent .msg-bubble { background: var(--blue); color: #fff; border-bottom-right-radius: 4px; }
-    .msg-meta { font-size: 11px; color: var(--muted); margin-top: 3px; }
-    .msg.agent .msg-meta { text-align: right; }
-    .typing { display: flex; align-items: center; gap: 4px; padding: 9px 13px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; border-bottom-left-radius: 4px; align-self: flex-start; }
-    .tdot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: bounce 1.2s infinite; }
-    .tdot:nth-child(2) { animation-delay: 0.2s; }
-    .tdot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
-    .reply-bar { background: var(--surface); border-top: 1px solid var(--border); padding: 10px 12px; padding-bottom: max(10px, env(safe-area-inset-bottom)); display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0; }
-    .reply-input { flex: 1; border: 1px solid var(--border); border-radius: 20px; padding: 9px 14px; font-size: 14px; font-family: inherit; resize: none; outline: none; line-height: 1.4; max-height: 120px; }
-    .reply-input:focus { border-color: var(--blue); }
-    .send-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--blue); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .send-btn:active { background: var(--blue-dark); }
-    .send-btn svg { width: 16px; height: 16px; }
+    #chat-view { position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); z-index:100; display:none; flex-direction:column; }
+    .chat-header { background:var(--surface); border-bottom:1px solid var(--border); padding:12px 16px; padding-top:max(12px,env(safe-area-inset-top)); display:flex; align-items:center; gap:10px; flex-shrink:0; }
+    .back-btn { color:var(--blue); font-size:15px; cursor:pointer; background:none; border:none; font-family:inherit; padding:4px 8px 4px 0; }
+    .chat-header-info { flex:1; min-width:0; }
+    .chat-header-name { font-size:15px; font-weight:600; }
+    .chat-header-page { font-size:11px; color:var(--muted); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .claimed-bar { background:var(--blue-light); border-bottom:1px solid #b5d4f4; padding:8px 16px; font-size:12px; color:#0c447c; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+    .claim-btn { background:var(--blue); color:#fff; border:none; border-radius:6px; padding:5px 12px; font-size:12px; cursor:pointer; font-family:inherit; font-weight:500; }
+    .close-btn-red { background:var(--red); color:#fff; border:none; border-radius:6px; padding:5px 12px; font-size:12px; cursor:pointer; font-family:inherit; font-weight:500; }
+    .messages-area { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px; display:flex; flex-direction:column; gap:8px; }
+    .msg { display:flex; flex-direction:column; max-width:80%; }
+    .msg.customer { align-self:flex-start; } .msg.agent { align-self:flex-end; }
+    .msg-bubble { padding:9px 13px; border-radius:16px; font-size:14px; line-height:1.5; word-break:break-word; }
+    .msg.customer .msg-bubble { background:var(--surface); border:1px solid var(--border); border-bottom-left-radius:4px; }
+    .msg.agent .msg-bubble { background:var(--blue); color:#fff; border-bottom-right-radius:4px; }
+    .msg-meta { font-size:11px; color:var(--muted); margin-top:3px; }
+    .msg.agent .msg-meta { text-align:right; }
+    .reply-bar { background:var(--surface); border-top:1px solid var(--border); padding:10px 12px; padding-bottom:max(14px,env(safe-area-inset-bottom)); display:flex; align-items:flex-end; gap:8px; flex-shrink:0; }
+    .reply-input { flex:1; border:1.5px solid var(--border); border-radius:20px; padding:10px 14px; font-size:15px; font-family:inherit; resize:none; outline:none; line-height:1.4; max-height:120px; background:var(--bg); -webkit-appearance:none; }
+    .reply-input:focus { border-color:var(--blue); background:var(--surface); }
+    .send-btn { width:40px; height:40px; border-radius:50%; background:var(--blue); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .send-btn:active { background:var(--blue-dark); }
+
+    /* SETTINGS */
+    .settings-scroll { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:12px; }
+    .card { background:var(--surface); border-radius:12px; border:1px solid var(--border); overflow:hidden; }
+    .card-header { padding:12px 14px; border-bottom:1px solid var(--border); font-size:12px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; }
+    .setting-row { display:flex; align-items:center; justify-content:space-between; padding:13px 14px; border-bottom:1px solid var(--border); }
+    .setting-row:last-child { border-bottom:none; }
+    .setting-label { font-size:14px; font-weight:500; }
+    .setting-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+    .toggle { width:46px; height:28px; border-radius:14px; border:none; cursor:pointer; position:relative; transition:background 0.2s; flex-shrink:0; }
+    .toggle.on { background:var(--green); } .toggle.off { background:#d1d5db; }
+    .toggle-knob { position:absolute; top:3px; width:22px; height:22px; border-radius:50%; background:#fff; transition:left 0.2s; box-shadow:0 1px 4px rgba(0,0,0,0.2); }
+    .toggle.on .toggle-knob { left:21px; } .toggle.off .toggle-knob { left:3px; }
+    .day-row { display:flex; align-items:center; padding:10px 14px; border-bottom:1px solid var(--border); gap:10px; }
+    .day-row:last-child { border-bottom:none; }
+    .day-toggle { width:38px; height:24px; border-radius:12px; border:none; cursor:pointer; position:relative; transition:background 0.2s; flex-shrink:0; }
+    .day-toggle.on { background:var(--green); } .day-toggle.off { background:#d1d5db; }
+    .day-toggle-knob { position:absolute; top:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:left 0.2s; }
+    .day-toggle.on .day-toggle-knob { left:17px; } .day-toggle.off .day-toggle-knob { left:3px; }
+    .day-name { font-size:14px; font-weight:500; width:34px; flex-shrink:0; }
+    .time-inputs { display:flex; align-items:center; gap:6px; flex:1; }
+    .time-input { border:1px solid var(--border); border-radius:8px; padding:6px 8px; font-size:13px; font-family:inherit; text-align:center; width:76px; outline:none; background:var(--bg); }
+    .time-input:focus { border-color:var(--blue); }
+    .time-input:disabled { color:var(--muted); }
+    .day-closed { font-size:13px; color:var(--muted); flex:1; }
+    .status-banner { margin:0 14px 14px; background:var(--blue-light); border-radius:10px; padding:11px 13px; font-size:13px; color:#0c447c; }
+    .save-btn { margin:0 14px 14px; background:var(--blue); color:#fff; border:none; border-radius:10px; padding:13px; font-size:15px; font-weight:500; cursor:pointer; font-family:inherit; width:calc(100% - 28px); }
+    .logout-btn { background:none; border:none; padding:13px; font-size:15px; font-family:inherit; cursor:pointer; color:var(--red); width:100%; text-align:center; }
 
     /* BOTTOM NAV */
-    .bottom-nav { background: var(--surface); border-top: 1px solid var(--border); display: flex; padding-bottom: env(safe-area-inset-bottom); flex-shrink: 0; }
-    .nav-item { flex: 1; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
-    .nav-icon { font-size: 22px; color: var(--muted); }
-    .nav-item.active .nav-icon { color: var(--blue); }
-    .nav-label { font-size: 10px; color: var(--muted); }
-    .nav-item.active .nav-label { color: var(--blue); }
+    .bottom-nav { background:var(--surface); border-top:1px solid var(--border); display:flex; padding-bottom:env(safe-area-inset-bottom); flex-shrink:0; }
+    .nav-item { flex:1; padding:8px 4px; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; }
+    .nav-icon { font-size:22px; }
+    .nav-label { font-size:10px; color:var(--muted); }
+    .nav-item.active .nav-label { color:var(--blue); }
 
-    /* NOTIFICATION */
-    .notif { position: fixed; top: 16px; left: 16px; right: 16px; background: var(--text); color: #fff; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 9999; transform: translateY(-100px); transition: transform 0.3s; box-shadow: 0 4px 16px rgba(0,0,0,0.2); cursor: pointer; }
-    .notif.show { transform: translateY(0); }
-    .notif-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-    .notif-text { flex: 1; font-size: 13px; }
-    .notif-title { font-weight: 500; }
-    .notif-sub { color: rgba(255,255,255,0.7); font-size: 12px; margin-top: 1px; }
-
-    .hidden { display: none !important; }
+    /* TOAST NOTIFICATIE */
+    .toast { position:fixed; top:16px; left:12px; right:12px; background:#1a1a1a; color:#fff; border-radius:14px; padding:13px 16px; display:flex; align-items:center; gap:12px; z-index:999; transform:translateY(-140px); transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 4px 20px rgba(0,0,0,0.25); cursor:pointer; }
+    .toast.show { transform:translateY(0); }
+    .toast-avatar { width:38px; height:38px; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
+    .toast-title { font-size:13px; font-weight:600; }
+    .toast-sub { font-size:12px; color:rgba(255,255,255,0.7); margin-top:2px; }
   </style>
 </head>
 <body>
 
-<!-- NOTIFICATION -->
-<div class="notif" id="notif" onclick="openNotifChat()">
-  <div class="notif-dot"></div>
-  <div class="notif-text">
-    <div class="notif-title" id="notif-title">Nieuw bericht</div>
-    <div class="notif-sub" id="notif-sub"></div>
-  </div>
+<!-- IN-APP TOAST -->
+<div class="toast" id="toast" onclick="openToastChat()">
+  <div class="toast-avatar">MN</div>
+  <div><div class="toast-title" id="toast-title">Nieuw bericht</div><div class="toast-sub" id="toast-sub"></div></div>
 </div>
 
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-logo"><span>MN</span></div>
   <div class="login-title">MN Chat</div>
-  <div class="login-sub">Log in om chats te beheren</div>
-  <input class="login-input" id="login-name" placeholder="Jouw naam (bijv. Emma)" />
-  <button class="login-btn" onclick="doLogin()">Inloggen</button>
+  <div class="login-sub">Log in om klantchats te beheren</div>
+  <input class="login-input" id="login-name" placeholder="Jouw naam (bijv. Emma)" autocomplete="name">
+  <button class="login-btn" onclick="doLogin()">Inloggen →</button>
 </div>
 
 <!-- APP -->
 <div id="app-screen">
 
-  <!-- CHAT LIST -->
-  <div id="chat-list-view" style="display:flex;flex-direction:column;height:100vh;">
+  <!-- CHATS SCREEN -->
+  <div class="screen active" id="screen-chats">
     <div class="topbar">
       <div class="topbar-left">
         <div class="topbar-logo"><span>MN</span></div>
-        <div>
-          <div class="topbar-title">Live Chats</div>
-          <div class="topbar-sub" id="agent-name-display"></div>
-        </div>
+        <div><div class="topbar-title">Live Chats</div><div class="topbar-sub" id="agent-name-display"></div></div>
       </div>
-      <div class="topbar-right">
-        <div class="online-badge"><div class="online-dot"></div><span class="online-text">Online</span></div>
-      </div>
+      <div class="online-badge"><div class="online-dot dot-green" id="status-dot"></div><span class="online-text" id="status-text">Online</span></div>
+    </div>
+    <div id="notif-permission-bar" style="display:none">
+      <p>🔔 Zet meldingen aan zodat je nieuwe chats niet mist</p>
+      <button class="allow-btn" onclick="requestNotifPermission()">Aanzetten</button>
+      <button class="dismiss-btn" onclick="dismissNotifBar()">✕</button>
     </div>
     <div class="tabs">
       <div class="tab active" onclick="filterChats('open',this)">Open <span class="tab-badge" id="badge-open">0</span></div>
       <div class="tab" onclick="filterChats('mine',this)">Mijn chats</div>
       <div class="tab" onclick="filterChats('closed',this)">Gesloten</div>
     </div>
-    <div style="flex:1;overflow-y:auto;" id="chats-container">
-      <div class="empty-state">
-        <div class="empty-icon">💬</div>
-        <div class="empty-title">Nog geen chats</div>
-        <div>Zodra een klant een bericht stuurt verschijnt die hier</div>
-      </div>
+    <div class="scroll-area" id="chats-container">
+      <div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">Nog geen chats</div><div>Zodra een klant een bericht stuurt verschijnt die hier</div></div>
     </div>
     <div class="bottom-nav">
-      <div class="nav-item active"><div class="nav-icon">💬</div><div class="nav-label">Chats</div></div>
-      <div class="nav-item"><div class="nav-icon">👥</div><div class="nav-label">Team</div></div>
-      <div class="nav-item"><div class="nav-icon">🔔</div><div class="nav-label">Meldingen</div></div>
-      <div class="nav-item"><div class="nav-icon">⚙️</div><div class="nav-label">Instellingen</div></div>
+      <div class="nav-item active" onclick="switchTab('chats')"><div class="nav-icon">💬</div><div class="nav-label" style="color:var(--blue)">Chats</div></div>
+      <div class="nav-item" onclick="switchTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Instellingen</div></div>
     </div>
   </div>
 
-  <!-- CHAT VIEW -->
-  <div id="chat-view">
-    <div class="chat-header">
-      <button class="back-btn" onclick="backToList()">← Terug</button>
-      <div class="chat-header-info">
-        <div class="chat-header-name" id="cv-name"></div>
-        <div class="chat-header-sub" id="cv-page"></div>
+  <!-- SETTINGS SCREEN -->
+  <div class="screen" id="screen-settings">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-logo"><span>MN</span></div>
+        <div><div class="topbar-title">Instellingen</div><div class="topbar-sub" id="settings-agent-name"></div></div>
       </div>
     </div>
-    <div class="claimed-bar" id="claimed-bar">
-      <span id="claimed-text">Nog niet opgepakt</span>
-      <button class="claim-btn" id="claim-btn" onclick="claimChat()">Oppakken</button>
+    <div class="settings-scroll">
+      <div class="card">
+        <div class="card-header">📡 Huidige status</div>
+        <div class="status-banner" id="status-banner">Bezig met laden…</div>
+      </div>
+      <div class="card">
+        <div class="card-header">🔘 Handmatige status</div>
+        <div class="setting-row">
+          <div><div class="setting-label">Online zetten</div><div class="setting-sub">Overschrijft het automatische schema</div></div>
+          <button class="toggle off" id="manual-toggle" onclick="toggleManual()"><div class="toggle-knob"></div></button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">📅 Automatisch schema</div>
+        <div class="setting-row">
+          <div><div class="setting-label">Schema inschakelen</div><div class="setting-sub">Widget volgt openingstijden automatisch</div></div>
+          <button class="toggle on" id="schedule-toggle" onclick="toggleSchedule()"><div class="toggle-knob"></div></button>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">Terugbelverzoek tonen</div><div class="setting-sub">Klant kan bericht achterlaten buiten openingstijden</div></div>
+          <button class="toggle on" id="callback-toggle" onclick="toggleBtn('callback-toggle')"><div class="toggle-knob"></div></button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">🕐 Openingstijden</div>
+        <div id="days-container"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">🔔 Meldingen</div>
+        <div class="setting-row">
+          <div><div class="setting-label">Push meldingen</div><div class="setting-sub" id="notif-status-text">Nog niet ingeschakeld</div></div>
+          <button class="allow-btn" id="notif-settings-btn" onclick="requestNotifPermission()">Aanzetten</button>
+        </div>
+      </div>
+      <button class="save-btn" onclick="saveSettings()">💾 Opslaan</button>
+      <div class="card"><div class="setting-row"><button class="logout-btn" onclick="doLogout()">Uitloggen</button></div></div>
     </div>
-    <div class="messages-area" id="messages-area"></div>
-    <div class="reply-bar">
-      <textarea class="reply-input" id="reply-input" placeholder="Typ een bericht…" rows="1" oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
-      <button class="send-btn" onclick="sendReply()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"></line>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-        </svg>
-      </button>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="switchTab('chats')"><div class="nav-icon">💬</div><div class="nav-label">Chats</div></div>
+      <div class="nav-item active" onclick="switchTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label" style="color:var(--blue)">Instellingen</div></div>
     </div>
   </div>
-
 </div>
 
-<!-- Firebase -->
+<!-- CHAT VIEW -->
+<div id="chat-view">
+  <div class="chat-header">
+    <button class="back-btn" onclick="backToList()">← Terug</button>
+    <div class="chat-header-info">
+      <div class="chat-header-name" id="cv-name"></div>
+      <div class="chat-header-page" id="cv-page"></div>
+    </div>
+  </div>
+  <div class="claimed-bar" id="claimed-bar">
+    <span id="claimed-text">Nog niet opgepakt</span>
+    <button class="claim-btn" id="claim-btn" onclick="claimChat()">Oppakken</button>
+  </div>
+  <div class="messages-area" id="messages-area"></div>
+  <div class="reply-bar">
+    <textarea class="reply-input" id="reply-input" placeholder="Typ een bericht…" rows="1" oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+    <button class="send-btn" onclick="sendReply()">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
 <script>
-  // Firebase config
-  const FIREBASE_CONFIG = {
-    apiKey: "AIzaSyAvgWPDiTlbcCwqE2Hwh47DHputbSQyCds",
-    authDomain: "mn-chat-7a6bd.firebaseapp.com",
-    databaseURL: "https://mn-chat-7a6bd-default-rtdb.firebaseio.com",
-    projectId: "mn-chat-7a6bd",
-    storageBucket: "mn-chat-7a6bd.firebasestorage.app",
-    messagingSenderId: "765217629725",
-    appId: "1:765217629725:web:85fe5f0d296025a75908f4"
-  };
+const FIREBASE_CONFIG = {
+  apiKey:"AIzaSyAvgWPDiTlbcCwqE2Hwh47DHputbSQyCds",
+  authDomain:"mn-chat-7a6bd.firebaseapp.com",
+  databaseURL:"https://mn-chat-7a6bd-default-rtdb.firebaseio.com",
+  projectId:"mn-chat-7a6bd",
+  storageBucket:"mn-chat-7a6bd.firebasestorage.app",
+  messagingSenderId:"765217629725",
+  appId:"1:765217629725:web:85fe5f0d296025a75908f4"
+};
+const VAPID_KEY = "BPL-ljKaAxe9jTwwhca_UJa8e9z4UAg1Skq2vRi2Rw5lkq4eJq42PfRI1zNJFeEJsfmZdBWiAjVjgPuh3RzoH3U";
 
-  firebase.initializeApp(FIREBASE_CONFIG);
-  const db = firebase.database();
+firebase.initializeApp(FIREBASE_CONFIG);
+const db = firebase.database();
+const messaging = firebase.messaging();
 
-  let agentName = localStorage.getItem('mn_agent_name') || '';
-  let currentChatId = null;
-  let allChats = {};
-  let currentFilter = 'open';
-  let notifChatId = null;
-  let messagesListener = null;
+let agentName = localStorage.getItem('mn_agent') || '';
+let currentChatId = null;
+let allChats = {};
+let currentFilter = 'open';
+let toastChatId = null;
+let chatListener = null;
+let scheduleOn = true;
+let manualOn = false;
 
-  // Auto login
-  if (agentName) {
-    showApp();
+const days = [
+  {key:'ma',label:'Ma',open:true, from:'08:30',to:'17:30'},
+  {key:'di',label:'Di',open:true, from:'08:30',to:'17:30'},
+  {key:'wo',label:'Wo',open:true, from:'08:30',to:'17:30'},
+  {key:'do',label:'Do',open:true, from:'08:30',to:'17:30'},
+  {key:'vr',label:'Vr',open:true, from:'08:30',to:'16:00'},
+  {key:'za',label:'Za',open:false,from:'10:00',to:'14:00'},
+  {key:'zo',label:'Zo',open:false,from:'10:00',to:'14:00'},
+];
+
+if (agentName) showApp();
+
+// ── LOGIN ─────────────────────────────────────
+function doLogin() {
+  const name = document.getElementById('login-name').value.trim();
+  if (!name) { document.getElementById('login-name').focus(); return; }
+  agentName = name;
+  localStorage.setItem('mn_agent', name);
+  showApp();
+}
+document.getElementById('login-name').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+function doLogout() { localStorage.removeItem('mn_agent'); location.reload(); }
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'flex';
+  document.getElementById('app-screen').style.flexDirection = 'column';
+  document.getElementById('agent-name-display').textContent = agentName;
+  document.getElementById('settings-agent-name').textContent = agentName;
+  renderDays();
+  updateStatusBanner();
+  listenToChats();
+  initNotifications();
+}
+
+// ── NOTIFICATIONS ─────────────────────────────
+function initNotifications() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'granted') {
+    registerSW();
+    updateNotifStatus('✅ Meldingen zijn ingeschakeld');
+    document.getElementById('notif-settings-btn').textContent = 'Ingeschakeld';
+    document.getElementById('notif-settings-btn').style.background = 'var(--green)';
+  } else if (Notification.permission !== 'denied') {
+    document.getElementById('notif-permission-bar').style.display = 'flex';
+  } else {
+    updateNotifStatus('❌ Geblokkeerd — sta toe in browserinstellingen');
   }
+}
 
-  function doLogin() {
-    const name = document.getElementById('login-name').value.trim();
-    if (!name) return;
-    agentName = name;
-    localStorage.setItem('mn_agent_name', name);
-    showApp();
-  }
-
-  document.getElementById('login-name').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') doLogin();
-  });
-
-  function showApp() {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app-screen').style.display = 'flex';
-    document.getElementById('app-screen').style.flexDirection = 'column';
-    document.getElementById('agent-name-display').textContent = agentName;
-    listenToChats();
-  }
-
-  function listenToChats() {
-    db.ref('chats').on('value', function(snap) {
-      const prev = JSON.stringify(allChats);
-      allChats = snap.val() || {};
-
-      // Check for new unread messages
-      Object.entries(allChats).forEach(([id, chat]) => {
-        if (!chat.messages) return;
-        const msgs = Object.values(chat.messages);
-        const lastMsg = msgs[msgs.length - 1];
-        if (lastMsg && lastMsg.role === 'customer' && chat.status === 'open' && id !== currentChatId) {
-          const prevChat = JSON.parse(prev)[id];
-          const prevMsgCount = prevChat && prevChat.messages ? Object.keys(prevChat.messages).length : 0;
-          if (Object.keys(chat.messages).length > prevMsgCount) {
-            showNotification(id, chat, lastMsg.text);
-          }
-        }
-      });
-
-      renderChatList();
-    });
-  }
-
-  function renderChatList() {
-    const container = document.getElementById('chats-container');
-    const openChats = Object.entries(allChats).filter(([id, c]) => c.status === 'open');
-
-    document.getElementById('badge-open').textContent = openChats.length;
-
-    let filtered = openChats;
-    if (currentFilter === 'mine') {
-      filtered = openChats.filter(([id, c]) => c.claimedBy === agentName);
-    } else if (currentFilter === 'closed') {
-      filtered = Object.entries(allChats).filter(([id, c]) => c.status === 'closed');
-    }
-
-    if (filtered.length === 0) {
-      container.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">Geen chats</div><div>Zodra een klant een bericht stuurt verschijnt die hier</div></div>';
-      return;
-    }
-
-    container.innerHTML = '';
-
-    // Sort: unclaimed first, then by latest message
-    filtered.sort(([,a],[,b]) => {
-      const aTime = a.messages ? Math.max(...Object.values(a.messages).map(m => m.timestamp||0)) : 0;
-      const bTime = b.messages ? Math.max(...Object.values(b.messages).map(m => m.timestamp||0)) : 0;
-      return bTime - aTime;
-    });
-
-    filtered.forEach(([id, chat]) => {
-      const msgs = chat.messages ? Object.values(chat.messages) : [];
-      const lastMsg = msgs[msgs.length - 1];
-      const isUnread = lastMsg && lastMsg.role === 'customer';
-      const initials = getInitials(id);
-      const colors = ['av-blue','av-green','av-orange'];
-      const color = colors[Math.abs(hashCode(id)) % colors.length];
-      const time = lastMsg ? formatTime(lastMsg.timestamp) : '';
-      const page = chat.page ? chat.page.replace('https://www.mnkantoormeubelen.nl','') : '';
-
-      const div = document.createElement('div');
-      div.className = 'chat-item' + (isUnread ? ' unread' : '');
-      div.onclick = () => openChat(id, chat);
-      div.innerHTML = `
-        <div class="chat-avatar ${color}">${initials}</div>
-        <div class="chat-meta">
-          <div class="chat-name">Bezoeker ${id.split('_')[1]||'?'}</div>
-          <div class="chat-preview">${lastMsg ? lastMsg.text : 'Geen berichten'}</div>
-          ${page ? `<div class="chat-page">📍 ${page || 'Homepage'}</div>` : ''}
-        </div>
-        <div class="chat-right">
-          <div class="chat-time">${time}</div>
-          ${isUnread ? '<div class="unread-dot"></div>' : ''}
-          ${chat.claimedBy ? `<div style="font-size:10px;color:var(--muted)">${chat.claimedBy}</div>` : ''}
-        </div>
-      `;
-      container.appendChild(div);
-    });
-  }
-
-  function openChat(id, chat) {
-    currentChatId = id;
-    document.getElementById('chat-list-view').style.display = 'none';
-    document.getElementById('chat-view').style.display = 'flex';
-    document.getElementById('chat-view').style.flexDirection = 'column';
-    document.getElementById('cv-name').textContent = 'Bezoeker ' + (id.split('_')[1]||'');
-    const page = chat.page ? chat.page.replace('https://www.mnkantoormeubelen.nl','') : 'Onbekende pagina';
-    document.getElementById('cv-page').textContent = '📍 ' + (page || 'Homepage');
-
-    updateClaimedBar(chat);
-    renderMessages(chat.messages || {});
-
-    // Live listen to messages
-    if (messagesListener) messagesListener.off();
-    messagesListener = db.ref('chats/' + id);
-    messagesListener.on('value', function(snap) {
-      const data = snap.val();
-      if (!data) return;
-      updateClaimedBar(data);
-      renderMessages(data.messages || {});
-    });
-  }
-
-  function updateClaimedBar(chat) {
-    const bar = document.getElementById('claimed-bar');
-    const text = document.getElementById('claimed-text');
-    const btn = document.getElementById('claim-btn');
-    if (chat.claimedBy) {
-      text.textContent = 'Opgepakt door ' + chat.claimedBy;
-      if (chat.claimedBy === agentName) {
-        btn.textContent = 'Afsluiten';
-        btn.onclick = closeChat;
-      } else {
-        btn.textContent = 'Overnemen';
-        btn.onclick = claimChat;
-      }
+function requestNotifPermission() {
+  Notification.requestPermission().then(permission => {
+    if (permission === 'granted') {
+      registerSW();
+      document.getElementById('notif-permission-bar').style.display = 'none';
+      updateNotifStatus('✅ Meldingen zijn ingeschakeld');
+      document.getElementById('notif-settings-btn').textContent = 'Ingeschakeld';
+      document.getElementById('notif-settings-btn').style.background = 'var(--green)';
     } else {
-      text.textContent = 'Nog niet opgepakt';
-      btn.textContent = 'Oppakken';
-      btn.onclick = claimChat;
+      updateNotifStatus('❌ Niet toegestaan');
     }
-  }
+  });
+}
 
-  function claimChat() {
-    if (!currentChatId) return;
-    db.ref('chats/' + currentChatId).update({ claimedBy: agentName });
-  }
+function dismissNotifBar() {
+  document.getElementById('notif-permission-bar').style.display = 'none';
+}
 
-  function closeChat() {
-    if (!currentChatId) return;
-    db.ref('chats/' + currentChatId).update({ status: 'closed', claimedBy: null });
-    backToList();
-  }
+function updateNotifStatus(text) {
+  document.getElementById('notif-status-text').textContent = text;
+}
 
-  function renderMessages(messages) {
-    const area = document.getElementById('messages-area');
-    const msgs = Object.values(messages).sort((a,b) => (a.timestamp||0)-(b.timestamp||0));
-    area.innerHTML = '';
-    msgs.forEach(msg => {
-      const div = document.createElement('div');
-      div.className = 'msg ' + (msg.role === 'agent' ? 'agent' : 'customer');
-      const time = formatTime(msg.timestamp);
-      const sender = msg.role === 'agent' ? (msg.sender || 'Agent') : 'Klant';
-      div.innerHTML = `<div class="msg-bubble">${msg.text}</div><div class="msg-meta">${sender} · ${time}</div>`;
-      area.appendChild(div);
+function registerSW() {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.register('/mn-chat/firebase-messaging-sw.js')
+    .then(reg => {
+      messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: reg })
+        .then(token => {
+          if (token) {
+            // Sla FCM token op per medewerker in Firebase
+            db.ref('agents/' + agentName.replace(/\s/g,'_') + '/fcmToken').set(token);
+          }
+        }).catch(err => console.warn('FCM token fout:', err));
+    }).catch(err => console.warn('Service worker fout:', err));
+}
+
+// In-app melding (als app open is)
+messaging.onMessage(payload => {
+  const title = payload.notification?.title || 'Nieuw bericht';
+  const body  = payload.notification?.body  || '';
+  showToast(title, body, null);
+});
+
+// ── FIREBASE CHATS ────────────────────────────
+function listenToChats() {
+  db.ref('chats').on('value', snap => {
+    const prev = JSON.stringify(allChats);
+    allChats = snap.val() || {};
+    Object.entries(allChats).forEach(([id, chat]) => {
+      if (!chat.messages || id === currentChatId) return;
+      const msgs = Object.values(chat.messages);
+      const lastMsg = msgs[msgs.length-1];
+      if (!lastMsg || lastMsg.role !== 'customer') return;
+      const prevChat = JSON.parse(prev)[id];
+      const prevCount = prevChat?.messages ? Object.keys(prevChat.messages).length : 0;
+      if (Object.keys(chat.messages).length > prevCount) {
+        showToast('Nieuw bericht van klant', lastMsg.text.substr(0,60), id);
+      }
     });
-    area.scrollTop = area.scrollHeight;
-  }
+    renderChatList();
+  });
+}
 
-  function sendReply() {
-    const input = document.getElementById('reply-input');
-    const text = input.value.trim();
-    if (!text || !currentChatId) return;
+function sendReply() {
+  const input = document.getElementById('reply-input');
+  const text = input.value.trim();
+  if (!text || !currentChatId) return;
+  db.ref('chats/' + currentChatId + '/messages').push({
+    role:'agent', sender:agentName, text:text, timestamp:Date.now()
+  }).then(() => {
     input.value = '';
     input.style.height = 'auto';
-
-    // Auto-claim if not claimed
-    db.ref('chats/' + currentChatId).once('value', function(snap) {
-      const chat = snap.val();
-      if (!chat.claimedBy) {
-        db.ref('chats/' + currentChatId).update({ claimedBy: agentName });
-      }
+    db.ref('chats/' + currentChatId + '/claimedBy').once('value', snap => {
+      if (!snap.val()) db.ref('chats/' + currentChatId).update({ claimedBy:agentName });
     });
+  }).catch(err => alert('Kon niet versturen: ' + err.message));
+}
 
-    db.ref('chats/' + currentChatId + '/messages').push({
-      role: 'agent',
-      sender: agentName,
-      text: text,
-      timestamp: Date.now()
-    });
-  }
+function claimChat() {
+  if (!currentChatId) return;
+  db.ref('chats/' + currentChatId).update({ claimedBy:agentName });
+}
 
-  function backToList() {
-    currentChatId = null;
-    if (messagesListener) { messagesListener.off(); messagesListener = null; }
-    document.getElementById('chat-view').style.display = 'none';
-    document.getElementById('chat-list-view').style.display = 'flex';
-  }
+function endChat() {
+  if (!currentChatId) return;
+  db.ref('chats/' + currentChatId).update({ status:'closed', claimedBy:null });
+  backToList();
+}
 
-  function filterChats(filter, el) {
-    currentFilter = filter;
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    renderChatList();
+// ── CHAT LIST ─────────────────────────────────
+function renderChatList() {
+  const container = document.getElementById('chats-container');
+  let entries = Object.entries(allChats);
+  document.getElementById('badge-open').textContent = entries.filter(([,c])=>c.status==='open').length;
+  let filtered;
+  if (currentFilter==='open') filtered = entries.filter(([,c])=>c.status==='open');
+  else if (currentFilter==='mine') filtered = entries.filter(([,c])=>c.status==='open'&&c.claimedBy===agentName);
+  else filtered = entries.filter(([,c])=>c.status==='closed');
+  if (!filtered.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">Geen chats</div><div>Zodra een klant een bericht stuurt verschijnt die hier</div></div>';
+    return;
   }
+  filtered.sort(([,a],[,b]) => {
+    const ta = a.messages ? Math.max(...Object.values(a.messages).map(m=>m.timestamp||0)):0;
+    const tb = b.messages ? Math.max(...Object.values(b.messages).map(m=>m.timestamp||0)):0;
+    return tb-ta;
+  });
+  container.innerHTML = '';
+  filtered.forEach(([id,chat]) => {
+    const msgs = chat.messages ? Object.values(chat.messages) : [];
+    const lastMsg = msgs[msgs.length-1];
+    const isUnread = lastMsg && lastMsg.role==='customer';
+    const colors = ['av-blue','av-green','av-orange'];
+    const color = colors[Math.abs(hashCode(id))%3];
+    const page = chat.page ? chat.page.replace('https://www.mnkantoormeubelen.nl','')||'Homepage' : '';
+    const div = document.createElement('div');
+    div.className = 'chat-item'+(isUnread?' unread':'');
+    div.onclick = () => openChat(id,chat);
+    div.innerHTML = `
+      <div class="chat-avatar ${color}">${id.substr(8,2).toUpperCase()}</div>
+      <div class="chat-meta">
+        <div class="chat-name">Klant · ${formatTime(chat.started)}</div>
+        <div class="chat-preview">${lastMsg?escHtml(lastMsg.text):'Geen berichten'}</div>
+        ${page?`<div class="chat-page-label">📍 ${escHtml(page)}</div>`:''}
+      </div>
+      <div class="chat-right">
+        <div class="chat-time">${lastMsg?formatTime(lastMsg.timestamp):''}</div>
+        ${isUnread?'<div class="unread-dot"></div>':''}
+        ${chat.claimedBy?`<div style="font-size:10px;color:var(--muted)">${escHtml(chat.claimedBy)}</div>`:''}
+      </div>`;
+    container.appendChild(div);
+  });
+}
 
-  function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendReply(); }
-  }
+function filterChats(filter,el) {
+  currentFilter = filter;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderChatList();
+}
 
-  function autoResize(el) {
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-  }
+// ── CHAT VIEW ─────────────────────────────────
+function openChat(id,chat) {
+  currentChatId = id;
+  document.getElementById('cv-name').textContent = 'Klant · '+formatTime(chat.started);
+  const page = chat.page?chat.page.replace('https://www.mnkantoormeubelen.nl','')||'Homepage':'';
+  document.getElementById('cv-page').textContent = page?'📍 '+page:'';
+  updateClaimedBar(chat);
+  renderMessages(chat.messages||{});
+  document.getElementById('chat-view').style.display = 'flex';
+  document.getElementById('chat-view').style.flexDirection = 'column';
+  if (chatListener) chatListener.off();
+  chatListener = db.ref('chats/'+id);
+  chatListener.on('value', snap => {
+    const data = snap.val(); if(!data) return;
+    updateClaimedBar(data); renderMessages(data.messages||{});
+  });
+  setTimeout(()=>document.getElementById('reply-input').focus(),300);
+}
 
-  function showNotification(id, chat, text) {
-    notifChatId = id;
-    document.getElementById('notif-title').textContent = 'Nieuw bericht van klant';
-    document.getElementById('notif-sub').textContent = text.length > 50 ? text.substr(0,50)+'…' : text;
-    const notif = document.getElementById('notif');
-    notif.classList.add('show');
-    setTimeout(() => notif.classList.remove('show'), 5000);
+function updateClaimedBar(chat) {
+  const text = document.getElementById('claimed-text');
+  const btn  = document.getElementById('claim-btn');
+  if (chat.claimedBy) {
+    text.textContent = 'Opgepakt door '+chat.claimedBy;
+    if (chat.claimedBy===agentName) { btn.textContent='Afsluiten'; btn.className='close-btn-red'; btn.onclick=endChat; }
+    else { btn.textContent='Overnemen'; btn.className='claim-btn'; btn.onclick=claimChat; }
+  } else {
+    text.textContent='Nog niet opgepakt'; btn.textContent='Oppakken'; btn.className='claim-btn'; btn.onclick=claimChat;
   }
+}
 
-  function openNotifChat() {
-    if (!notifChatId || !allChats[notifChatId]) return;
-    document.getElementById('notif').classList.remove('show');
-    openChat(notifChatId, allChats[notifChatId]);
-  }
+function renderMessages(messages) {
+  const area = document.getElementById('messages-area');
+  const atBottom = area.scrollHeight-area.scrollTop-area.clientHeight < 80;
+  const msgs = Object.values(messages).sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
+  area.innerHTML = '';
+  msgs.forEach(msg => {
+    const div = document.createElement('div');
+    div.className = 'msg '+(msg.role==='agent'?'agent':'customer');
+    const sender = msg.role==='agent'?(msg.sender||'Agent'):'Klant';
+    div.innerHTML = `<div class="msg-bubble">${escHtml(msg.text)}</div><div class="msg-meta">${escHtml(sender)} · ${formatTime(msg.timestamp)}</div>`;
+    area.appendChild(div);
+  });
+  if (atBottom||msgs.length<=3) area.scrollTop = area.scrollHeight;
+}
 
-  // Helpers
-  function formatTime(ts) {
-    if (!ts) return '';
-    const d = new Date(ts);
-    return d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
+function backToList() {
+  currentChatId = null;
+  if (chatListener){chatListener.off();chatListener=null;}
+  document.getElementById('chat-view').style.display='none';
+}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendReply();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+
+// ── SETTINGS ─────────────────────────────────
+function renderDays() {
+  const c = document.getElementById('days-container'); c.innerHTML='';
+  days.forEach((d,i) => {
+    const row = document.createElement('div'); row.className='day-row';
+    row.innerHTML=`
+      <button class="day-toggle ${d.open?'on':'off'}" onclick="toggleDay(${i})"><div class="day-toggle-knob"></div></button>
+      <span class="day-name">${d.label}</span>
+      ${d.open
+        ?`<div class="time-inputs"><input class="time-input" type="time" value="${d.from}" onchange="days[${i}].from=this.value;updateStatusBanner()"><span style="color:var(--muted)">–</span><input class="time-input" type="time" value="${d.to}" onchange="days[${i}].to=this.value;updateStatusBanner()"></div>`
+        :`<span class="day-closed">Gesloten</span>`}`;
+    c.appendChild(row);
+  });
+}
+function toggleDay(i){days[i].open=!days[i].open;renderDays();updateStatusBanner();}
+function toggleSchedule(){scheduleOn=!scheduleOn;const b=document.getElementById('schedule-toggle');b.className='toggle '+(scheduleOn?'on':'off');updateStatusBanner();}
+function toggleManual(){manualOn=!manualOn;const b=document.getElementById('manual-toggle');b.className='toggle '+(manualOn?'on':'off');updateStatusBanner();}
+function toggleBtn(id){const b=document.getElementById(id);b.className='toggle '+(b.classList.contains('on')?'off':'on');}
+
+function updateStatusBanner() {
+  let online=false, msg='';
+  if (manualOn){online=true;msg='🟢 Handmatig online gezet';}
+  else if (!scheduleOn){online=false;msg='⚪ Schema uitgeschakeld — widget afwezig';}
+  else {
+    const now=new Date(),dayIdx=(now.getDay()+6)%7,d=days[dayIdx];
+    const toMins=t=>{const[h,m]=t.split(':').map(Number);return h*60+m;};
+    const nowMins=now.getHours()*60+now.getMinutes();
+    if(d.open&&nowMins>=toMins(d.from)&&nowMins<toMins(d.to)){
+      online=true; msg=`🟢 Online — sluit om ${d.to}`;
+    } else {
+      const next=days.find((x,i)=>i>dayIdx&&x.open);
+      msg=next?`⚪ Afwezig — open ${next.label} om ${next.from}`:'⚪ Afwezig — zie schema';
+    }
   }
-  function getInitials(id) {
-    const n = id.split('_')[1] || '?';
-    return n.substr(0,2).toUpperCase();
-  }
-  function hashCode(str) {
-    let h = 0;
-    for (let i = 0; i < str.length; i++) h = Math.imul(31, h) + str.charCodeAt(i) | 0;
-    return h;
-  }
+  document.getElementById('status-banner').textContent=msg;
+  document.getElementById('status-dot').className='online-dot '+(online?'dot-green':'dot-gray');
+  document.getElementById('status-text').textContent=online?'Online':'Afwezig';
+  db.ref('settings/online').set(online);
+}
+
+function saveSettings() {
+  const btn=document.querySelector('.save-btn');
+  db.ref('settings').set({online:manualOn||false,schedule:days,scheduleOn,updatedBy:agentName,updatedAt:Date.now()})
+    .then(()=>{btn.textContent='✓ Opgeslagen!';btn.style.background='var(--green)';setTimeout(()=>{btn.textContent='💾 Opslaan';btn.style.background='';},2000);})
+    .catch(()=>alert('Opslaan mislukt.'));
+}
+
+// ── TOAST ─────────────────────────────────────
+function showToast(title,body,chatId) {
+  toastChatId=chatId;
+  document.getElementById('toast-title').textContent=title;
+  document.getElementById('toast-sub').textContent=body.length>55?body.substr(0,55)+'…':body;
+  const t=document.getElementById('toast'); t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),5000);
+}
+function openToastChat(){
+  document.getElementById('toast').classList.remove('show');
+  if(toastChatId&&allChats[toastChatId]) openChat(toastChatId,allChats[toastChatId]);
+}
+
+// ── NAV ───────────────────────────────────────
+function switchTab(tab){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+tab).classList.add('active');
+}
+
+// ── HELPERS ───────────────────────────────────
+function formatTime(ts){if(!ts)return'';const d=new Date(ts);return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');}
+function hashCode(str){let h=0;for(let i=0;i<str.length;i++)h=Math.imul(31,h)+str.charCodeAt(i)|0;return h;}
+function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 </script>
 </body>
 </html>
