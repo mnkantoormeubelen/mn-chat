@@ -1,7 +1,4 @@
 {
   "name": "mn-chat-functions",
-  "version": "1.0.0",
-  "dependencies": {
-    "google-auth-library": "^9.0.0"
-  }
+  "version": "1.0.0"
 }
