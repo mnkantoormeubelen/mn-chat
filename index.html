@@ -436,6 +436,7 @@ function sendReply() {
     .then(() => {
       input.value=''; input.style.height='auto';
       db.ref('chats/'+currentChatId+'/claimedBy').once('value', snap => { if(!snap.val()) db.ref('chats/'+currentChatId).update({claimedBy:agentName}); });
+
     }).catch(e => alert('Kon niet versturen: '+e.message));
 }
 function claimChat() { if(currentChatId) db.ref('chats/'+currentChatId).update({claimedBy:agentName}); }
@@ -579,3 +580,48 @@ function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt
 </script>
 </body>
 </html>
+<script>
+// Stuur pushmelding via Netlify function bij nieuw klantbericht
+async function sendPushToAgents(title, body) {
+  try {
+    // Haal alle FCM tokens op uit Firebase
+    const snap = await db.ref('agents').once('value');
+    const agents = snap.val() || {};
+    const tokens = Object.values(agents)
+      .map(a => a.fcmToken)
+      .filter(Boolean);
+    if (!tokens.length) return;
+
+    await fetch('/.netlify/functions/send-notification', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tokens, title, body })
+    });
+  } catch(e) {
+    console.warn('Push fout:', e);
+  }
+}
+
+// Override listenToChats om push te sturen
+const _origListen = listenToChats;
+db.ref('chats').on('value', snap => {
+  const prev = window._prevChats ? JSON.parse(window._prevChats) : {};
+  const chats = snap.val() || {};
+  window._prevChats = JSON.stringify(chats);
+
+  Object.entries(chats).forEach(([id, chat]) => {
+    if (!chat.messages) return;
+    const msgs = Object.values(chat.messages);
+    const lastMsg = msgs[msgs.length - 1];
+    if (!lastMsg || lastMsg.role !== 'customer') return;
+    const prevChat = prev[id];
+    const prevCount = prevChat?.messages ? Object.keys(prevChat.messages).length : 0;
+    if (Object.keys(chat.messages).length > prevCount) {
+      sendPushToAgents(
+        'Nieuw bericht van klant',
+        lastMsg.text.substr(0, 80)
+      );
+    }
+  });
+});
+</script>
