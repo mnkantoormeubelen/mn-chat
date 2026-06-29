@@ -309,7 +309,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
 firebase.initializeApp({
   apiKey:"AIzaSyAvgWPDiTlbcCwqE2Hwh47DHputbSQyCds",
@@ -321,8 +321,6 @@ firebase.initializeApp({
   appId:"1:765217629725:web:85fe5f0d296025a75908f4"
 });
 const db = firebase.database();
-const messaging = firebase.messaging();
-const VAPID_KEY = "BPL-ljKaAxe9jTwwhca_UJa8e9z4UAg1Skq2vRi2Rw5lkq4eJq42PfRI1zNJFeEJsfmZdBWiAjVjgPuh3RzoH3U";
 
 let agentName = localStorage.getItem('mn_agent') || '';
 let currentChatId = null;
@@ -387,28 +385,56 @@ function loadSettings() {
 
 // ── NOTIFICATIONS ─────────────────────────────
 function initNotifications() {
-  if (!('Notification' in window)) { updateNotifStatus('Niet ondersteund op dit apparaat'); return; }
-  if (Notification.permission === 'granted') { registerSW(); updateNotifStatus('✅ Ingeschakeld'); document.getElementById('notif-settings-btn').textContent='✓ Aan'; document.getElementById('notif-settings-btn').style.background='var(--green)'; }
-  else if (Notification.permission !== 'denied') { document.getElementById('notif-permission-bar').style.display='flex'; updateNotifStatus('Nog niet ingeschakeld — tik op Aanzetten'); }
-  else { updateNotifStatus('❌ Geblokkeerd — sta toe in browserinstellingen'); }
-}
-function requestNotifPermission() {
-  Notification.requestPermission().then(p => {
-    if (p==='granted') { registerSW(); document.getElementById('notif-permission-bar').style.display='none'; updateNotifStatus('✅ Ingeschakeld'); document.getElementById('notif-settings-btn').textContent='✓ Aan'; document.getElementById('notif-settings-btn').style.background='var(--green)'; }
-    else { updateNotifStatus('❌ Niet toegestaan'); }
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "0922fba7-ca4d-4cd9-95e8-8c5b9b846c6c",
+      serviceWorkerPath: "/OneSignalSDKWorker.js",
+      notifyButton: { enable: false },
+      allowLocalhostAsSecureOrigin: true
+    });
+    const permission = await OneSignal.Notifications.permission;
+    if (permission) {
+      updateNotifStatus('✅ Ingeschakeld');
+      document.getElementById('notif-settings-btn').textContent = '✓ Aan';
+      document.getElementById('notif-settings-btn').style.background = 'var(--green)';
+      document.getElementById('notif-permission-bar').style.display = 'none';
+      saveOneSignalId();
+    } else {
+      document.getElementById('notif-permission-bar').style.display = 'flex';
+      updateNotifStatus('Nog niet ingeschakeld — tik op Aanzetten');
+    }
   });
 }
+
+async function saveOneSignalId() {
+  OneSignalDeferred.push(async function(OneSignal) {
+    const osId = await OneSignal.User.PushSubscription.id;
+    if (osId && agentName) {
+      db.ref('agents/' + agentName.replace(/\s/g,'_') + '/osId').set(osId);
+      console.log('OneSignal ID opgeslagen:', osId);
+    }
+  });
+}
+
+function requestNotifPermission() {
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.Notifications.requestPermission();
+    const permission = await OneSignal.Notifications.permission;
+    if (permission) {
+      updateNotifStatus('✅ Ingeschakeld');
+      document.getElementById('notif-settings-btn').textContent = '✓ Aan';
+      document.getElementById('notif-settings-btn').style.background = 'var(--green)';
+      document.getElementById('notif-permission-bar').style.display = 'none';
+      saveOneSignalId();
+    } else {
+      updateNotifStatus('❌ Niet toegestaan');
+    }
+  });
+}
+
 function dismissNotifBar() { document.getElementById('notif-permission-bar').style.display='none'; }
 function updateNotifStatus(t) { document.getElementById('notif-status-text').textContent=t; }
-function registerSW() {
-  if (!('serviceWorker' in navigator)) return;
-  navigator.serviceWorker.register('/firebase-messaging-sw.js').then(reg => {
-    messaging.getToken({vapidKey:VAPID_KEY,serviceWorkerRegistration:reg}).then(token => {
-      if (token) db.ref('agents/'+agentName.replace(/\s/g,'_')+'/fcmToken').set(token);
-    }).catch(e => console.warn('FCM:',e));
-  }).catch(e => console.warn('SW:',e));
-}
-messaging.onMessage(payload => { showToast(payload.notification?.title||'Nieuw bericht', payload.notification?.body||'', null); });
 
 // ── FIREBASE CHATS ────────────────────────────
 function listenToChats() {
@@ -587,13 +613,13 @@ async function sendPushToAgents(title, body) {
   try {
     const snap = await db.ref('agents').once('value');
     const agents = snap.val() || {};
-    const tokens = Object.values(agents).map(a => a.fcmToken).filter(Boolean);
-    console.log('FCM tokens:', tokens.length, tokens);
-    if (!tokens.length) { console.warn('Geen FCM tokens!'); return; }
+    const osIds = Object.values(agents).map(a => a.osId).filter(Boolean);
+    console.log('OneSignal IDs:', osIds.length, osIds);
+    if (!osIds.length) { console.warn('Geen OneSignal IDs!'); return; }
     const resp = await fetch('/.netlify/functions/send-notification', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tokens, title, body })
+      body: JSON.stringify({ osIds, title, body })
     });
     const result = await resp.json();
     console.log('Push verstuurd:', result);
