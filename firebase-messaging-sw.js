@@ -18,8 +18,8 @@ messaging.onBackgroundMessage(function(payload) {
   const body  = payload.notification?.body  || 'Een klant heeft een bericht gestuurd';
   self.registration.showNotification(title, {
     body: body,
-    icon: 'https://super-hotteok-6ce98b.netlify.app/icon.png',
-    badge: 'https://super-hotteok-6ce98b.netlify.app/icon.png',
+    icon: 'https://genuine-granita-c22cdd.netlify.app/icon.png',
+    badge: 'https://genuine-granita-c22cdd.netlify.app/icon.png',
     tag: 'mn-chat',
     vibrate: [200, 100, 200],
     data: payload.data || {}
@@ -31,9 +31,9 @@ self.addEventListener('notificationclick', function(event) {
   event.waitUntil(
     clients.matchAll({ type: 'window' }).then(function(clientList) {
       for (const client of clientList) {
-        if (client.url.includes('index.html') && 'focus' in client) return client.focus();
+        if (client.url.includes('genuine-granita-c22cdd.netlify.app') && 'focus' in client) return client.focus();
       }
-      return clients.openWindow('https://super-hotteok-6ce98b.netlify.app/index.html');
+      return clients.openWindow('https://genuine-granita-c22cdd.netlify.app');
     })
   );
 });
