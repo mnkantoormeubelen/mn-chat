@@ -422,8 +422,11 @@ function listenToChats() {
       if (!lastMsg||lastMsg.role!=='customer') return;
       const prevChat = JSON.parse(prev)[id];
       const prevCount = prevChat?.messages?Object.keys(prevChat.messages).length:0;
-      if (Object.keys(chat.messages).length>prevCount) showToast('Nieuw bericht van klant', lastMsg.text.substr(0,60), id);
+      if (Object.keys(chat.messages).length>prevCount) {
+        console.log('Nieuw klantbericht! Push wordt verstuurd...');
+        showToast('Nieuw bericht van klant', lastMsg.text.substr(0,60), id);
         sendPushToAgents('Nieuw bericht van klant', lastMsg.text.substr(0,80));
+      }
     });
     renderChatList();
   });
@@ -585,12 +588,15 @@ async function sendPushToAgents(title, body) {
     const snap = await db.ref('agents').once('value');
     const agents = snap.val() || {};
     const tokens = Object.values(agents).map(a => a.fcmToken).filter(Boolean);
-    if (!tokens.length) return;
-    await fetch('/.netlify/functions/send-notification', {
+    console.log('FCM tokens:', tokens.length, tokens);
+    if (!tokens.length) { console.warn('Geen FCM tokens!'); return; }
+    const resp = await fetch('/.netlify/functions/send-notification', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tokens, title, body })
     });
+    const result = await resp.json();
+    console.log('Push verstuurd:', result);
   } catch(e) { console.warn('Push fout:', e); }
 }
 
