@@ -10,6 +10,8 @@ exports.handler = async function(event, context) {
       return { statusCode: 200, body: JSON.stringify({ message: 'Geen ontvangers' }) };
     }
 
+    console.log('Stuur naar subscription IDs:', osIds);
+
     const response = await fetch('https://onesignal.com/api/v1/notifications', {
       method: 'POST',
       headers: {
@@ -22,7 +24,9 @@ exports.handler = async function(event, context) {
         headings: { en: title, nl: title },
         contents: { en: body, nl: body },
         url: 'https://genuine-granita-c22cdd.netlify.app',
-        web_push_topic: 'mn-chat-notification'
+        priority: 10,
+        android_channel_id: '',
+        android_visibility: 1
       })
     });
 
