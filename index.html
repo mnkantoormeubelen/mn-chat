@@ -409,10 +409,17 @@ function initNotifications() {
 
 async function saveOneSignalId() {
   OneSignalDeferred.push(async function(OneSignal) {
-    const osId = await OneSignal.User.PushSubscription.id;
-    if (osId && agentName) {
-      db.ref('agents/' + agentName.replace(/\s/g,'_') + '/osId').set(osId);
-      console.log('OneSignal ID opgeslagen:', osId);
+    // Sla zowel subscription ID als user ID op
+    const subscriptionId = await OneSignal.User.PushSubscription.id;
+    const token = await OneSignal.User.PushSubscription.token;
+    console.log('OneSignal Subscription ID:', subscriptionId);
+    console.log('OneSignal Token:', token);
+    if (subscriptionId && agentName) {
+      db.ref('agents/' + agentName.replace(/\s/g,'_')).update({
+        osId: subscriptionId,
+        osToken: token || ''
+      });
+      console.log('OneSignal IDs opgeslagen');
     }
   });
 }
