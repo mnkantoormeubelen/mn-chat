@@ -2,20 +2,20 @@
   "name": "MN Kantoormeubelen Chat",
   "short_name": "MN Chat",
   "description": "Live chat app voor MN Kantoormeubelen medewerkers",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0a8de9",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://cdn.webshopapp.com/shops/302405/themes/164679/v/2356688/assets/logo.png?20240624151845",
+      "src": "https://via.placeholder.com/192x192/0a8de9/ffffff?text=MN",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://cdn.webshopapp.com/shops/302405/themes/164679/v/2356688/assets/logo.png?20240624151845",
+      "src": "https://via.placeholder.com/512x512/0a8de9/ffffff?text=MN",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
