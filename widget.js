@@ -35,7 +35,27 @@
     document.body.appendChild(widget);
 
     var isOpen = false;
-    var sessionId = "session_" + Date.now() + "_" + Math.random().toString(36).substr(2, 6);
+    var sessionId = getOrCreateSessionId();
+
+    function getOrCreateSessionId() {
+      try {
+        var stored = localStorage.getItem("mn_chat_session_id");
+        var storedTime = localStorage.getItem("mn_chat_session_time");
+        var now = Date.now();
+        // Hergebruik sessie als die korter dan 24 uur geleden is aangemaakt
+        if (stored && storedTime && (now - parseInt(storedTime)) < 24 * 60 * 60 * 1000) {
+          return stored;
+        }
+      } catch (e) {
+        // localStorage niet beschikbaar, val terug op tijdelijke sessie
+      }
+      var newId = "session_" + Date.now() + "_" + Math.random().toString(36).substr(2, 6);
+      try {
+        localStorage.setItem("mn_chat_session_id", newId);
+        localStorage.setItem("mn_chat_session_time", Date.now().toString());
+      } catch (e) {}
+      return newId;
+    }
     var db = null;
     var messagesRef = null;
     var msgs = [];
@@ -50,7 +70,6 @@
           firebase.initializeApp(FIREBASE_CONFIG);
           db = firebase.database();
           messagesRef = db.ref("chats/" + sessionId + "/messages");
-          listenForAgentMessages();
           checkShopStatusAndGreet();
         };
         document.head.appendChild(s2);
@@ -63,12 +82,41 @@
         shopSettings = snap.val() || {};
         isShopOnline = computeOnlineStatus(shopSettings);
         updateFabAppearance();
-        var greeting = isShopOnline
-          ? (shopSettings.msgOnline || DEFAULT_GREETING)
-          : buildOfflineMessage(shopSettings);
-        addMessage("agent", greeting, "Klantservice");
+        loadExistingMessagesThenGreet();
       }).catch(function() {
-        addMessage("agent", DEFAULT_GREETING, "Klantservice");
+        loadExistingMessagesThenGreet();
+      });
+    }
+
+    function loadExistingMessagesThenGreet() {
+      messagesRef.once("value").then(function(snap) {
+        var existing = snap.val();
+        if (existing) {
+          // Sessie bestond al: toon de eerdere berichten, geen nieuwe begroeting
+          var msgs = Object.values(existing).sort(function(a,b){ return (a.timestamp||0)-(b.timestamp||0); });
+          msgs.forEach(function(msg) {
+            addMessage(msg.role === "agent" ? "agent" : "user", msg.text, msg.role === "agent" ? "Klantservice" : "");
+          });
+        } else {
+          // Nieuwe sessie: toon de begroeting
+          var greeting = isShopOnline
+            ? (shopSettings.msgOnline || DEFAULT_GREETING)
+            : buildOfflineMessage(shopSettings);
+          addMessage("agent", greeting, "Klantservice");
+        }
+        // Vanaf nu live luisteren naar nieuwe berichten van werknemers
+        attachLiveAgentListener();
+      });
+    }
+
+    function attachLiveAgentListener() {
+      var startTime = Date.now();
+      messagesRef.on("child_added", function (snap) {
+        var msg = snap.val();
+        if (msg.role === "agent" && msg.timestamp && msg.timestamp >= startTime - 2000) {
+          removeTyping();
+          addMessage("agent", msg.text, "Klantservice");
+        }
       });
     }
 
@@ -116,16 +164,6 @@
       if (sub) sub.innerHTML = isShopOnline
         ? "Klantservice &middot; &lt; 5 min reactie"
         : "Klantservice &middot; momenteel afwezig";
-    }
-
-    function listenForAgentMessages() {
-      messagesRef.on("child_added", function (snap) {
-        var msg = snap.val();
-        if (msg.role === "agent") {
-          removeTyping();
-          addMessage("agent", msg.text, "Klantservice");
-        }
-      });
     }
 
     function addMessage(role, text, sender) {
