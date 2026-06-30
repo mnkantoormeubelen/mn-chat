@@ -9,8 +9,11 @@
   function init() {
     var FAB_COLOR = "#1a9e3f";
     var ACCENT = "#0a8de9";
-    var GREETING = "Goedemiddag! Waarmee kan ik je helpen? 👋";
+    var DEFAULT_GREETING = "Goedemiddag! Waarmee kan ik je helpen? 👋";
+    var DEFAULT_OFFLINE_MSG = "Bedankt voor je bericht! Onze klantenservice is momenteel gesloten. We reageren zo snel mogelijk tijdens onze openingstijden.";
     var SHOP = "MN Kantoormeubelen";
+    var isShopOnline = true;
+    var shopSettings = null;
 
     var FIREBASE_CONFIG = {
       apiKey: "AIzaSyAvgWPDiTlbcCwqE2Hwh47DHputbSQyCds",
@@ -28,7 +31,7 @@
 
     var widget = document.createElement("div");
     widget.id = "mn-chat-widget";
-    widget.innerHTML = '<div id="mn-chat-tooltip">Stel een vraag</div><div id="mn-chat-popup"><div id="mn-chat-header"><div class="mn-avatar">MN<div class="mn-online-dot"></div></div><div><div class="mn-header-name">' + SHOP + '</div><div class="mn-header-sub">Klantservice &middot; &lt; 5 min reactie</div></div><button id="mn-chat-close" aria-label="Sluit">&times;</button></div><div id="mn-chat-messages"></div><div id="mn-chat-input-row"><input id="mn-chat-input" placeholder="Stel je vraag&hellip;" /><button id="mn-chat-send" aria-label="Verstuur"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button></div><div id="mn-chat-footer">' + SHOP + ' live chat</div></div><button id="mn-chat-fab" aria-label="Open chat"><svg viewBox="0 0 24 24" fill="none" stroke="' + FAB_COLOR + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="9" cy="10" r="1" fill="' + FAB_COLOR + '"></circle><circle cx="12" cy="10" r="1" fill="' + FAB_COLOR + '"></circle><circle cx="15" cy="10" r="1" fill="' + FAB_COLOR + '"></circle></svg><div id="mn-chat-fab-badge">1</div></button>';
+    widget.innerHTML = '<div id="mn-chat-tooltip">Stel een vraag</div><div id="mn-chat-popup"><div id="mn-chat-header"><div class="mn-avatar">MN<div class="mn-online-dot" id="mn-chat-status-dot"></div></div><div><div class="mn-header-name">' + SHOP + '</div><div class="mn-header-sub" id="mn-chat-header-sub">Klantservice &middot; &lt; 5 min reactie</div></div><button id="mn-chat-close" aria-label="Sluit">&times;</button></div><div id="mn-chat-messages"></div><div id="mn-chat-input-row"><input id="mn-chat-input" placeholder="Stel je vraag&hellip;" /><button id="mn-chat-send" aria-label="Verstuur"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button></div><div id="mn-chat-footer">' + SHOP + ' live chat</div></div><button id="mn-chat-fab" aria-label="Open chat"><svg viewBox="0 0 24 24" fill="none" stroke="' + FAB_COLOR + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="9" cy="10" r="1" fill="' + FAB_COLOR + '"></circle><circle cx="12" cy="10" r="1" fill="' + FAB_COLOR + '"></circle><circle cx="15" cy="10" r="1" fill="' + FAB_COLOR + '"></circle></svg><div id="mn-chat-fab-badge">1</div></button>';
     document.body.appendChild(widget);
 
     var isOpen = false;
@@ -48,11 +51,71 @@
           db = firebase.database();
           messagesRef = db.ref("chats/" + sessionId + "/messages");
           listenForAgentMessages();
-          addMessage("agent", GREETING, "Klantservice");
+          checkShopStatusAndGreet();
         };
         document.head.appendChild(s2);
       };
       document.head.appendChild(s1);
+    }
+
+    function checkShopStatusAndGreet() {
+      db.ref("settings").once("value").then(function(snap) {
+        shopSettings = snap.val() || {};
+        isShopOnline = computeOnlineStatus(shopSettings);
+        updateFabAppearance();
+        var greeting = isShopOnline
+          ? (shopSettings.msgOnline || DEFAULT_GREETING)
+          : buildOfflineMessage(shopSettings);
+        addMessage("agent", greeting, "Klantservice");
+      }).catch(function() {
+        addMessage("agent", DEFAULT_GREETING, "Klantservice");
+      });
+    }
+
+    function computeOnlineStatus(settings) {
+      if (!settings) return true;
+      if (settings.online === true) return true;
+      if (settings.scheduleOn === false) return settings.online !== false;
+      var schedule = settings.schedule;
+      if (!schedule || !schedule.length) return true;
+      var now = new Date();
+      var dayIdx = (now.getDay() + 6) % 7;
+      var d = schedule[dayIdx];
+      if (!d || !d.open) return false;
+      var toMins = function(t) { var p = t.split(":"); return parseInt(p[0])*60 + parseInt(p[1]); };
+      var nowMins = now.getHours()*60 + now.getMinutes();
+      return nowMins >= toMins(d.from) && nowMins < toMins(d.to);
+    }
+
+    function buildOfflineMessage(settings) {
+      var msg = settings.msgOffline || DEFAULT_OFFLINE_MSG;
+      if (settings.showHours && settings.schedule) {
+        var labels = ["Ma","Di","Wo","Do","Vr","Za","Zo"];
+        var now = new Date();
+        var dayIdx = (now.getDay() + 6) % 7;
+        var next = null, nextLabel = "";
+        for (var i = 1; i <= 7; i++) {
+          var idx = (dayIdx + i) % 7;
+          if (settings.schedule[idx] && settings.schedule[idx].open) {
+            next = settings.schedule[idx];
+            nextLabel = labels[idx];
+            break;
+          }
+        }
+        if (next) {
+          msg += " (open weer " + nextLabel + " om " + next.from + ")";
+        }
+      }
+      return msg;
+    }
+
+    function updateFabAppearance() {
+      var dot = document.getElementById("mn-chat-status-dot");
+      if (dot) dot.style.background = isShopOnline ? "#4ade80" : "#9ca3af";
+      var sub = document.getElementById("mn-chat-header-sub");
+      if (sub) sub.innerHTML = isShopOnline
+        ? "Klantservice &middot; &lt; 5 min reactie"
+        : "Klantservice &middot; momenteel afwezig";
     }
 
     function listenForAgentMessages() {
