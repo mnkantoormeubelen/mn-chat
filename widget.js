@@ -97,7 +97,7 @@
       addMessage("user", text, "");
       showTyping();
       if (messagesRef) {
-        messagesRef.push({ role: "user", text: text, timestamp: Date.now() });
+        messagesRef.push({ role: "customer", text: text, timestamp: Date.now() });
         db.ref("chats/" + sessionId).update({ page: window.location.href, started: Date.now(), status: "open" });
       }
     }
