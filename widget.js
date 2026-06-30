@@ -166,6 +166,18 @@
         : "Klantservice &middot; momenteel afwezig";
     }
 
+    function linkify(text) {
+      var escaped = String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      var urlPattern = /((https?:\/\/|www\.)[^\s<]+)/gi;
+      return escaped.replace(urlPattern, function(match) {
+        var href = match.indexOf("http") === 0 ? match : "https://" + match;
+        return '<a href="' + href + '" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline">' + match + '</a>';
+      });
+    }
+
     function addMessage(role, text, sender) {
       var now = new Date();
       var t = now.getHours() + ":" + String(now.getMinutes()).padStart(2, "0");
@@ -174,7 +186,7 @@
       var div = document.createElement("div");
       div.className = "mn-msg " + role;
       var meta = role === "agent" ? (sender + " &middot; " + t) : ("Jij &middot; " + t);
-      div.innerHTML = '<div class="mn-bubble">' + text + '</div><div class="mn-meta">' + meta + '</div>';
+      div.innerHTML = '<div class="mn-bubble">' + linkify(text) + '</div><div class="mn-meta">' + meta + '</div>';
       container.appendChild(div);
       container.scrollTop = container.scrollHeight;
     }
