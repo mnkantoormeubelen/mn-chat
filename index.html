@@ -549,7 +549,7 @@ function renderMessages(messages){
   const atBottom=area.scrollHeight-area.scrollTop-area.clientHeight<80;
   const msgs=Object.values(messages).sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
   area.innerHTML='';
-  msgs.forEach(msg=>{const div=document.createElement('div');div.className='msg '+(msg.role==='agent'?'agent':'customer');const sender=msg.role==='agent'?(msg.sender||'Agent'):'Klant';div.innerHTML=`<div class="msg-bubble">${escHtml(msg.text)}</div><div class="msg-meta">${escHtml(sender)} · ${formatTime(msg.timestamp)}</div>`;area.appendChild(div);});
+  msgs.forEach(msg=>{const div=document.createElement('div');div.className='msg '+(msg.role==='agent'?'agent':'customer');const sender=msg.role==='agent'?(msg.sender||'Agent'):'Klant';div.innerHTML=`<div class="msg-bubble">${linkify(msg.text)}</div><div class="msg-meta">${escHtml(sender)} · ${formatTime(msg.timestamp)}</div>`;area.appendChild(div);});
   if(atBottom||msgs.length<=3) area.scrollTop=area.scrollHeight;
 }
 function backToList(){currentChatId=null;if(chatListener){chatListener.off();chatListener=null;}document.getElementById('chat-view').style.display='none';}
@@ -634,6 +634,14 @@ if ("serviceWorker" in navigator) {
 }
 
 function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function linkify(str){
+  const escaped = escHtml(str);
+  const urlPattern = /((https?:\/\/|www\.)[^\s<]+)/gi;
+  return escaped.replace(urlPattern, function(match){
+    const href = match.indexOf('http') === 0 ? match : 'https://' + match;
+    return '<a href="'+href+'" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline">'+match+'</a>';
+  });
+}
 
 // ── PUSH MELDINGEN ────────────────────────────
 async function sendPushToAgents(title, body) {
