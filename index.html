@@ -445,22 +445,42 @@ function updateNotifStatus(t) { document.getElementById('notif-status-text').tex
 
 // ── FIREBASE CHATS ────────────────────────────
 function listenToChats() {
+  const startTime = Date.now();
+  // Luister naar nieuwe berichten via child_changed en child_added
+  db.ref('chats').on('child_changed', function(snap) {
+    const id = snap.key;
+    const chat = snap.val();
+    if (!chat || !chat.messages || id === currentChatId) return;
+    const msgs = Object.values(chat.messages).sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
+    const lastMsg = msgs[msgs.length-1];
+    if (!lastMsg || lastMsg.role !== 'customer') return;
+    // Alleen berichten die na opstarten zijn binnengekomen
+    if (!lastMsg.timestamp || lastMsg.timestamp < startTime) return;
+    console.log('Nieuw klantbericht ontvangen! Stuur push...');
+    showToast('Nieuw bericht van klant', lastMsg.text.substr(0,60), id);
+    sendPushToAgents('Nieuw bericht van klant', lastMsg.text.substr(0,80));
+    allChats[id] = chat;
+    renderChatList();
+  });
+
+  db.ref('chats').on('child_added', function(snap) {
+    const id = snap.key;
+    const chat = snap.val();
+    if (!chat || !chat.messages || id === currentChatId) return;
+    const msgs = Object.values(chat.messages).sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
+    const lastMsg = msgs[msgs.length-1];
+    if (!lastMsg || lastMsg.role !== 'customer') return;
+    if (!lastMsg.timestamp || lastMsg.timestamp < startTime) return;
+    console.log('Nieuwe chat gestart! Stuur push...');
+    showToast('Nieuwe chat van klant', lastMsg.text.substr(0,60), id);
+    sendPushToAgents('Nieuwe chat van klant', lastMsg.text.substr(0,80));
+    allChats[id] = chat;
+    renderChatList();
+  });
+
+  // Laad alle chats voor de lijst
   db.ref('chats').on('value', snap => {
-    const prev = JSON.stringify(allChats);
     allChats = snap.val() || {};
-    Object.entries(allChats).forEach(([id,chat]) => {
-      if (!chat.messages||id===currentChatId) return;
-      const msgs = Object.values(chat.messages);
-      const lastMsg = msgs[msgs.length-1];
-      if (!lastMsg||lastMsg.role!=='customer') return;
-      const prevChat = JSON.parse(prev)[id];
-      const prevCount = prevChat?.messages?Object.keys(prevChat.messages).length:0;
-      if (Object.keys(chat.messages).length>prevCount) {
-        console.log('Nieuw klantbericht! Push wordt verstuurd...');
-        showToast('Nieuw bericht van klant', lastMsg.text.substr(0,60), id);
-        sendPushToAgents('Nieuw bericht van klant', lastMsg.text.substr(0,80));
-      }
-    });
     renderChatList();
   });
 }
