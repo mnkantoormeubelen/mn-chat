@@ -79,6 +79,8 @@
     .msg-bubble { padding:9px 13px; border-radius:16px; font-size:14px; line-height:1.5; word-break:break-word; }
     .msg.customer .msg-bubble { background:var(--surface); border:1px solid var(--border); border-bottom-left-radius:4px; }
     .msg.agent .msg-bubble { background:var(--blue); color:#fff; border-bottom-right-radius:4px; }
+    .msg-bubble a { color:#1a73e8; text-decoration:underline; word-break:break-all; }
+    .msg.agent .msg-bubble a { color:#d6e9ff; }
     .msg-meta { font-size:11px; color:var(--muted); margin-top:3px; }
     .msg.agent .msg-meta { text-align:right; }
     .reply-bar { background:var(--surface); border-top:1px solid var(--border); padding:10px 12px; padding-bottom:max(14px,env(safe-area-inset-bottom)); display:flex; align-items:flex-end; gap:8px; flex-shrink:0; }
@@ -639,7 +641,7 @@ function linkify(str){
   const urlPattern = /((https?:\/\/|www\.)[^\s<]+)/gi;
   return escaped.replace(urlPattern, function(match){
     const href = match.indexOf('http') === 0 ? match : 'https://' + match;
-    return '<a href="'+href+'" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline">'+match+'</a>';
+    return '<a href="'+href+'" target="_blank" rel="noopener noreferrer">'+match+'</a>';
   });
 }
 
