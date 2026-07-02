@@ -10,7 +10,7 @@ exports.handler = async function(event, context) {
       return { statusCode: 200, body: JSON.stringify({ message: 'Geen ontvangers' }) };
     }
 
-    console.log('Stuur naar subscription IDs:', osIds);
+    console.log('Stuur naar osIds:', osIds);
 
     const response = await fetch('https://onesignal.com/api/v1/notifications', {
       method: 'POST',
@@ -20,13 +20,12 @@ exports.handler = async function(event, context) {
       },
       body: JSON.stringify({
         app_id: '0922fba7-ca4d-4cd9-95e8-8c5b9b846c6c',
-        include_subscription_ids: osIds,
+        include_aliases: { onesignal_id: osIds },
+        target_channel: 'push',
         headings: { en: title, nl: title },
         contents: { en: body, nl: body },
         url: 'https://heartfelt-biscochitos-35decb.netlify.app',
-        priority: 10,
-        android_channel_id: '',
-        android_visibility: 1
+        priority: 10
       })
     });
 
