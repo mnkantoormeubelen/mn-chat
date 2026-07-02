@@ -23,7 +23,7 @@ exports.handler = async function(event, context) {
         include_subscription_ids: osIds,
         headings: { en: title, nl: title },
         contents: { en: body, nl: body },
-        url: 'https://genuine-granita-c22cdd.netlify.app',
+        url: 'https://heartfelt-biscochitos-35decb.netlify.app',
         priority: 10,
         android_channel_id: '',
         android_visibility: 1
