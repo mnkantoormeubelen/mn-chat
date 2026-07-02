@@ -411,17 +411,26 @@ function initNotifications() {
 
 async function saveOneSignalId() {
   OneSignalDeferred.push(async function(OneSignal) {
-    // Sla zowel subscription ID als user ID op
+    // Wacht even tot OneSignal volledig geladen is
+    await new Promise(r => setTimeout(r, 2000));
+    
+    // Haal zowel User ID als Subscription ID op
+    const userId = await OneSignal.User.onesignalId;
     const subscriptionId = await OneSignal.User.PushSubscription.id;
     const token = await OneSignal.User.PushSubscription.token;
+    
+    console.log('OneSignal User ID:', userId);
     console.log('OneSignal Subscription ID:', subscriptionId);
     console.log('OneSignal Token:', token);
-    if (subscriptionId && agentName) {
-      db.ref('agents/' + agentName.replace(/\s/g,'_')).update({
-        osId: subscriptionId,
+    
+    if (agentName) {
+      const key = agentName.replace(/\s/g,'_');
+      db.ref('agents/' + key).update({
+        osId: userId || subscriptionId,
+        osSubscriptionId: subscriptionId,
         osToken: token || ''
       });
-      console.log('OneSignal IDs opgeslagen');
+      console.log('OneSignal IDs opgeslagen - userId:', userId, 'subscriptionId:', subscriptionId);
     }
   });
 }
@@ -651,12 +660,14 @@ async function sendPushToAgents(title, body) {
     const snap = await db.ref('agents').once('value');
     const agents = snap.val() || {};
     const osIds = Object.values(agents).map(a => a.osId).filter(Boolean);
-    console.log('OneSignal IDs:', osIds.length, osIds);
-    if (!osIds.length) { console.warn('Geen OneSignal IDs!'); return; }
+    const osSubscriptionIds = Object.values(agents).map(a => a.osSubscriptionId).filter(Boolean);
+    console.log('OneSignal User IDs:', osIds.length, osIds);
+    console.log('OneSignal Subscription IDs:', osSubscriptionIds.length, osSubscriptionIds);
+    if (!osIds.length && !osSubscriptionIds.length) { console.warn('Geen OneSignal IDs!'); return; }
     const resp = await fetch('/.netlify/functions/send-notification', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ osIds, title, body })
+      body: JSON.stringify({ osIds, osSubscriptionIds, title, body })
     });
     const result = await resp.json();
     console.log('Push verstuurd:', result);
