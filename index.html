@@ -366,6 +366,18 @@ function showApp() {
   listenToChats();
   loadSettings();
   initNotifications();
+  keepAlive();
+}
+
+// Ping de Netlify function elke 4 minuten om slaapstand te voorkomen
+function keepAlive() {
+  setInterval(function() {
+    fetch('/.netlify/functions/send-notification', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ osIds: [], osSubscriptionIds: [], title: 'ping', body: 'ping' })
+    }).catch(() => {});
+  }, 4 * 60 * 1000);
 }
 
 // ── SETTINGS LADEN ────────────────────────────
