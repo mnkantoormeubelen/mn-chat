@@ -1,4 +1,9 @@
 exports.handler = async function(event, context) {
+  // Keepalive ping via GET
+  if (event.httpMethod === 'GET') {
+    return { statusCode: 200, body: JSON.stringify({ status: 'alive' }) };
+  }
+
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
