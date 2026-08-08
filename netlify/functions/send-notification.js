@@ -32,6 +32,9 @@ exports.handler = async function(event, context) {
           headings: { en: title, nl: title },
           contents: { en: body, nl: body },
           url: 'https://heartfelt-biscochitos-35decb.netlify.app',
+          priority: 10,
+          android_sound: 'notification',
+          android_visibility: 1,
           priority: 10
         })
       });
@@ -56,7 +59,9 @@ exports.handler = async function(event, context) {
           headings: { en: title, nl: title },
           contents: { en: body, nl: body },
           url: 'https://heartfelt-biscochitos-35decb.netlify.app',
-          priority: 10
+          priority: 10,
+          android_sound: 'notification',
+          android_visibility: 1
         })
       });
       const res2 = await r2.json();
