@@ -69,6 +69,15 @@ exports.handler = async function(event, context) {
       results.push(res2);
     }
 
+    // Stuur ook WhatsApp melding via CallMeBot
+    try {
+      const waText = encodeURIComponent('🔔 Nieuw bericht van klant: ' + body);
+      await fetch('https://api.callmebot.com/whatsapp.php?phone=31642066322&text=' + waText + '&apikey=2664934');
+      console.log('WhatsApp melding verstuurd');
+    } catch (waErr) {
+      console.warn('WhatsApp fout:', waErr.message);
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify({ success: true, results })
