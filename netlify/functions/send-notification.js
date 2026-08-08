@@ -69,13 +69,13 @@ exports.handler = async function(event, context) {
       results.push(res2);
     }
 
-    // Stuur ook WhatsApp melding via CallMeBot
+    // Stuur Telegram melding via CallMeBot
     try {
-      const waText = encodeURIComponent('🔔 Nieuw bericht van klant: ' + body);
-      await fetch('https://api.callmebot.com/whatsapp.php?phone=31642066322&text=' + waText + '&apikey=2664934');
-      console.log('WhatsApp melding verstuurd');
-    } catch (waErr) {
-      console.warn('WhatsApp fout:', waErr.message);
+      const tgText = encodeURIComponent('🔔 Nieuw bericht van klant: ' + body);
+      await fetch('https://api.callmebot.com/text.php?user=@Maartenmnkantoor&text=' + tgText);
+      console.log('Telegram melding verstuurd');
+    } catch (tgErr) {
+      console.warn('Telegram fout:', tgErr.message);
     }
 
     return {
