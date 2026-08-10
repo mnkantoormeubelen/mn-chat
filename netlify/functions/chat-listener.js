@@ -1,21 +1,23 @@
-// MN Chat - Permanente Firebase listener via Netlify Scheduled Function
-const { initializeApp, cert } = require('firebase-admin/app');
+const { initializeApp, getApps, cert } = require('firebase-admin/app');
 const { getDatabase } = require('firebase-admin/database');
 
-// Firebase Admin initialiseren
-const firebaseApp = initializeApp({
-  credential: cert({
-    projectId: "mn-chat-7a6bd",
-    clientEmail: "firebase-adminsdk-fbsvc@mn-chat-7a6bd.iam.gserviceaccount.com",
-    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
-  }),
-  databaseURL: "https://mn-chat-7a6bd-default-rtdb.firebaseio.com"
-});
+let db;
 
-const db = getDatabase(firebaseApp);
+function initFirebase() {
+  if (getApps().length === 0) {
+    initializeApp({
+      credential: cert({
+        projectId: "mn-chat-7a6bd",
+        clientEmail: "firebase-adminsdk-fbsvc@mn-chat-7a6bd.iam.gserviceaccount.com",
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+      }),
+      databaseURL: "https://mn-chat-7a6bd-default-rtdb.firebaseio.com"
+    });
+  }
+  return getDatabase();
+}
 
-async function sendNotifications(title, body) {
-  // Haal agents op
+async function sendNotifications(db, title, body) {
   const agentsSnap = await db.ref('agents').once('value');
   const agents = agentsSnap.val() || {};
   
@@ -26,7 +28,6 @@ async function sendNotifications(title, body) {
 
   const promises = [];
 
-  // Push via subscription IDs
   if (osSubscriptionIds.length) {
     promises.push(fetch('https://onesignal.com/api/v1/notifications', {
       method: 'POST',
@@ -42,7 +43,6 @@ async function sendNotifications(title, body) {
     }));
   }
 
-  // Push via user IDs
   if (osIds.length) {
     promises.push(fetch('https://onesignal.com/api/v1/notifications', {
       method: 'POST',
@@ -59,34 +59,31 @@ async function sendNotifications(title, body) {
     }));
   }
 
-  // Telegram
   promises.push(fetch('https://api.callmebot.com/text.php?user=Maartenmnkantoor&text=' + encodeURIComponent('🔔 ' + title + ': ' + body)));
 
   await Promise.all(promises);
-  console.log('Meldingen verstuurd');
+  console.log('Alle meldingen verstuurd');
 }
 
 exports.handler = async function(event, context) {
   try {
-    console.log('Chat listener gestart - controleer nieuwe berichten');
+    console.log('Chat listener gestart');
     
-    // Haal timestamp op van laatste check
+    db = initFirebase();
+    
     const lastCheckSnap = await db.ref('system/lastNotificationCheck').once('value');
-    const lastCheck = lastCheckSnap.val() || (Date.now() - 60000); // Max 1 minuut terug
+    const lastCheck = lastCheckSnap.val() || (Date.now() - 60000);
     const now = Date.now();
     
-    // Update timestamp direct
     await db.ref('system/lastNotificationCheck').set(now);
     
-    // Haal alle open chats op
-    const chatsSnap = await db.ref('chats').orderByChild('status').equalTo('open').once('value');
+    const chatsSnap = await db.ref('chats').once('value');
     const chats = chatsSnap.val() || {};
     
     let newMessages = [];
     
     Object.entries(chats).forEach(([chatId, chat]) => {
-      if (!chat.messages) return;
-      
+      if (!chat.messages || chat.status !== 'open') return;
       Object.values(chat.messages).forEach(msg => {
         if (msg.role === 'customer' && msg.timestamp && msg.timestamp > lastCheck && msg.timestamp <= now) {
           newMessages.push({ chatId, text: msg.text, timestamp: msg.timestamp });
@@ -97,14 +94,13 @@ exports.handler = async function(event, context) {
     console.log('Nieuwe berichten gevonden:', newMessages.length);
     
     if (newMessages.length > 0) {
-      // Stuur melding voor het laatste nieuwe bericht
       const latest = newMessages.sort((a,b) => b.timestamp - a.timestamp)[0];
-      await sendNotifications('Nieuw bericht van klant', latest.text.substr(0, 80));
+      await sendNotifications(db, 'Nieuw bericht van klant', latest.text.substr(0, 80));
     }
     
     return { statusCode: 200, body: JSON.stringify({ checked: true, newMessages: newMessages.length }) };
   } catch (err) {
-    console.error('Fout:', err.message);
+    console.error('Fout:', err.message, err.stack);
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };
